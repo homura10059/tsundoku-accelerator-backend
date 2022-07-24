@@ -6,7 +6,10 @@ use lambda_http::{run, service_fn, Error, IntoResponse, Request, RequestExt, Res
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     // Extract some useful information from the request
-    let id = event.query_string_parameters().first("id").unwrap();
+    let params = event.query_string_parameters();
+    if let Some(id) = params.first("id") {
+        println!("{}", id);
+    }
 
     // Return something that implements IntoResponse.
     // It will be serialized to the right response event automatically by the runtime

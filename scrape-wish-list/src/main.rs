@@ -1,4 +1,5 @@
 use lambda_http::{run, service_fn, Error, IntoResponse, Request, RequestExt, Response};
+use scrape_wish_list::get_wish_list_snapshot;
 
 /// This is the main body for the function.
 /// Write your code inside it.
@@ -8,7 +9,8 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     // Extract some useful information from the request
     let params = event.query_string_parameters();
     if let Some(id) = params.first("id") {
-        println!("{}", id);
+        let snapshot = get_wish_list_snapshot(id)?;
+        println!("{:?}", snapshot);
     }
 
     // Return something that implements IntoResponse.

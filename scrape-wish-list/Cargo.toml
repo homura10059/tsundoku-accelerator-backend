@@ -11,10 +11,13 @@ edition = "2021"
 # and it will keep the alphabetic ordering for you.
 
 [dependencies]
+anyhow = "1.0.58"
+headless_chrome = {git = "https://github.com/atroche/rust-headless-chrome", features = ["fetch"]}
 lambda_http = "0.5.2"
 lambda_runtime = "0.5.1"
 tokio = { version = "1", features = ["macros"] }
 tracing = { version = "0.1", features = ["log"] }
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
+url = "2.2.2"
 
 

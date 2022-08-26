@@ -3,5 +3,6 @@
 members = [
     "domains",
     "repositories",
+    "prisma-cli",
     "scrape-wish-list",
 ]

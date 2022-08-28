@@ -9,7 +9,45 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   displayName String
   email       String?
+}
+
+model WishList {
+  id              String            @id @default(cuid())
+  url             String            @unique
+  scrapedAt       Int
+  title           String
+  EbookInWishList EbookInWishList[]
+}
+
+model Ebook {
+  id              String            @id @default(cuid())
+  url             String            @unique
+  snapshots       EbookSnapshot[]
+  EbookInWishList EbookInWishList[]
+}
+
+model EbookInWishList {
+  wishList   WishList @relation(fields: [wishListId], references: [id])
+  wishListId String
+  ebook      Ebook    @relation(fields: [ebookId], references: [id])
+  ebookId    String
+
+  @@id([wishListId, ebookId])
+}
+
+model EbookSnapshot {
+  id           String @id @default(cuid())
+  ebook        Ebook  @relation(fields: [ebookId], references: [id])
+  ebookId      String
+  title        String
+  scrapedAt    Int
+  thumbnailUrl String
+  price        Int
+  discount     Int
+  discountRate Int
+  points       Int
+  pointsRate   Int
 }

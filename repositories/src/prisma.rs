@@ -19,7 +19,7 @@ pub use prisma_client_rust::{queries::Error as QueryError, NewClientError};
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 use std::sync::Arc;
-static DATAMODEL_STR : & 'static str = "generator client {\n  provider = \"cargo prisma\"\n  output   = \"../repositories/src/prisma.rs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id          String   @id @default(cuid())\n  displayName String\n  email       String?\n}\n" ;
+static DATAMODEL_STR : & 'static str = "generator client {\n  provider = \"cargo prisma\"\n  output   = \"../repositories/src/prisma.rs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id          String  @id @default(cuid())\n  displayName String\n  email       String?\n}\n\nmodel WishList {\n  id              String            @id @default(cuid())\n  url             String            @unique\n  scrapedAt       Int\n  title           String\n  EbookInWishList EbookInWishList[]\n}\n\nmodel Ebook {\n  id              String            @id @default(cuid())\n  url             String            @unique\n  snapshots       EbookSnapshot[]\n  EbookInWishList EbookInWishList[]\n}\n\nmodel EbookInWishList {\n  wishList   WishList @relation(fields: [wishListId], references: [id])\n  wishListId String\n  ebook      Ebook    @relation(fields: [ebookId], references: [id])\n  ebookId    String\n\n  @@id([wishListId, ebookId])\n}\n\nmodel EbookSnapshot {\n  id           String @id @default(cuid())\n  ebook        Ebook  @relation(fields: [ebookId], references: [id])\n  ebookId      String\n  title        String\n  scrapedAt    Int\n  thumbnailUrl String\n  price        Int\n  discount     Int\n  discountRate Int\n  points       Int\n  pointsRate   Int\n}\n" ;
 static DATABASE_STR: &'static str = "postgresql";
 pub async fn new_client() -> Result<_prisma::PrismaClient, NewClientError> {
     let config = parse_configuration(DATAMODEL_STR)?.subject;
@@ -749,6 +749,4500 @@ pub mod user {
         }
     }
 }
+pub mod wish_list {
+    use super::_prisma::*;
+    use super::*;
+    pub mod id {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals<T: From<UniqueWhereParam>>(value: String) -> T {
+            UniqueWhereParam::IdEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Id(direction)
+        }
+        pub fn cursor(cursor: String) -> Cursor {
+            Cursor::Id(cursor)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::IdInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::IdNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::IdLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::IdLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::IdGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::IdGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::IdContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::IdStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::IdEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::IdMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::IdNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetId(value.0)
+            }
+        }
+    }
+    pub mod url {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals<T: From<UniqueWhereParam>>(value: String) -> T {
+            UniqueWhereParam::UrlEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Url(direction)
+        }
+        pub fn cursor(cursor: String) -> Cursor {
+            Cursor::Url(cursor)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::UrlInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::UrlNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::UrlLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::UrlLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::UrlGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::UrlGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::UrlContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::UrlStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::UrlEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::UrlMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::UrlNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetUrl(value.0)
+            }
+        }
+    }
+    pub mod scraped_at {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: i32) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::ScrapedAt(direction)
+        }
+        pub fn in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::ScrapedAtInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::ScrapedAtNotInVec(value)
+        }
+        pub fn lt(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtLt(value)
+        }
+        pub fn lte(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtLte(value)
+        }
+        pub fn gt(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtGt(value)
+        }
+        pub fn gte(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtGte(value)
+        }
+        pub fn not(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtNot(value)
+        }
+        pub fn increment(value: i32) -> SetParam {
+            SetParam::IncrementScrapedAt(value)
+        }
+        pub fn decrement(value: i32) -> SetParam {
+            SetParam::DecrementScrapedAt(value)
+        }
+        pub fn multiply(value: i32) -> SetParam {
+            SetParam::MultiplyScrapedAt(value)
+        }
+        pub fn divide(value: i32) -> SetParam {
+            SetParam::DivideScrapedAt(value)
+        }
+        pub struct Set(i32);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetScrapedAt(value.0)
+            }
+        }
+    }
+    pub mod title {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: String) -> WhereParam {
+            WhereParam::TitleEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Title(direction)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::TitleInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::TitleNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::TitleLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::TitleLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::TitleGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::TitleGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::TitleContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::TitleStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::TitleEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::TitleMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::TitleNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetTitle(value.0)
+            }
+        }
+    }
+    pub mod ebook_in_wish_list {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn some(value: Vec<ebook_in_wish_list::WhereParam>) -> WhereParam {
+            WhereParam::EbookInWishListSome(value)
+        }
+        pub fn every(value: Vec<ebook_in_wish_list::WhereParam>) -> WhereParam {
+            WhereParam::EbookInWishListEvery(value)
+        }
+        pub fn none(value: Vec<ebook_in_wish_list::WhereParam>) -> WhereParam {
+            WhereParam::EbookInWishListNone(value)
+        }
+        pub struct Fetch {
+            args: ebook_in_wish_list::ManyArgs,
+        }
+        impl Fetch {
+            pub fn with(mut self, params: impl Into<ebook_in_wish_list::WithParam>) -> Self {
+                self.args = self.args.with(params.into());
+                self
+            }
+            pub fn order_by(mut self, param: ebook_in_wish_list::OrderByParam) -> Self {
+                self.args = self.args.order_by(param);
+                self
+            }
+            pub fn skip(mut self, value: i64) -> Self {
+                self.args = self.args.skip(value);
+                self
+            }
+            pub fn take(mut self, value: i64) -> Self {
+                self.args = self.args.take(value);
+                self
+            }
+            pub fn cursor(mut self, value: impl Into<ebook_in_wish_list::Cursor>) -> Self {
+                self.args = self.args.cursor(value.into());
+                self
+            }
+        }
+        impl From<Fetch> for WithParam {
+            fn from(fetch: Fetch) -> Self {
+                WithParam::EbookInWishList(fetch.args)
+            }
+        }
+        pub fn fetch(params: Vec<ebook_in_wish_list::WhereParam>) -> Fetch {
+            Fetch {
+                args: ebook_in_wish_list::ManyArgs::new(params),
+            }
+        }
+        pub fn link<T: From<Link>>(params: Vec<ebook_in_wish_list::UniqueWhereParam>) -> T {
+            Link(params).into()
+        }
+        pub fn unlink(params: Vec<ebook_in_wish_list::UniqueWhereParam>) -> SetParam {
+            SetParam::UnlinkEbookInWishList(params)
+        }
+        pub struct Link(Vec<ebook_in_wish_list::UniqueWhereParam>);
+        impl From<Link> for SetParam {
+            fn from(value: Link) -> Self {
+                Self::LinkEbookInWishList(value.0)
+            }
+        }
+    }
+    pub fn _outputs() -> Vec<Selection> {
+        ["id", "url", "scrapedAt", "title"]
+            .into_iter()
+            .map(|o| {
+                let builder = Selection::builder(o);
+                builder.build()
+            })
+            .collect()
+    }
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub struct Data {
+        #[serde(rename = "id")]
+        pub id: String,
+        #[serde(rename = "url")]
+        pub url: String,
+        #[serde(rename = "scrapedAt")]
+        pub scraped_at: i32,
+        #[serde(rename = "title")]
+        pub title: String,
+        #[serde(rename = "EbookInWishList")]
+        pub ebook_in_wish_list: Option<Vec<super::ebook_in_wish_list::Data>>,
+    }
+    impl Data {
+        pub fn ebook_in_wish_list(
+            &self,
+        ) -> Result<&Vec<super::ebook_in_wish_list::Data>, &'static str> {
+            self . ebook_in_wish_list . as_ref () . ok_or ("Attempted to access 'ebook_in_wish_list' but did not fetch it using the .with() syntax")
+        }
+    }
+    #[derive(Clone)]
+    pub enum WithParam {
+        EbookInWishList(super::ebook_in_wish_list::ManyArgs),
+    }
+    impl Into<Selection> for WithParam {
+        fn into(self) -> Selection {
+            match self {
+                Self::EbookInWishList(args) => {
+                    let (arguments, mut nested_selections) = args.to_graphql();
+                    nested_selections.extend(super::ebook_in_wish_list::_outputs());
+                    let mut builder = Selection::builder("EbookInWishList");
+                    builder
+                        .nested_selections(nested_selections)
+                        .set_arguments(arguments);
+                    builder.build()
+                }
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum SetParam {
+        SetId(String),
+        SetUrl(String),
+        SetScrapedAt(i32),
+        IncrementScrapedAt(i32),
+        DecrementScrapedAt(i32),
+        MultiplyScrapedAt(i32),
+        DivideScrapedAt(i32),
+        SetTitle(String),
+        LinkEbookInWishList(Vec<super::ebook_in_wish_list::UniqueWhereParam>),
+        UnlinkEbookInWishList(Vec<super::ebook_in_wish_list::UniqueWhereParam>),
+    }
+    impl Into<(String, PrismaValue)> for SetParam {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                SetParam::SetId(value) => ("id".to_string(), PrismaValue::String(value)),
+                SetParam::SetUrl(value) => ("url".to_string(), PrismaValue::String(value)),
+                SetParam::SetScrapedAt(value) => {
+                    ("scrapedAt".to_string(), PrismaValue::Int(value as i64))
+                }
+                SetParam::IncrementScrapedAt(value) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::Object(vec![(
+                        "increment".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DecrementScrapedAt(value) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::Object(vec![(
+                        "decrement".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::MultiplyScrapedAt(value) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::Object(vec![(
+                        "multiply".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DivideScrapedAt(value) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::Object(vec![(
+                        "divide".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::SetTitle(value) => ("title".to_string(), PrismaValue::String(value)),
+                SetParam::LinkEbookInWishList(where_params) => (
+                    "EbookInWishList".to_string(),
+                    PrismaValue::Object(vec![(
+                        "connect".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            where_params
+                                .into_iter()
+                                .map(Into::<super::ebook_in_wish_list::WhereParam>::into),
+                        )),
+                    )]),
+                ),
+                SetParam::UnlinkEbookInWishList(where_params) => (
+                    "EbookInWishList".to_string(),
+                    PrismaValue::Object(vec![(
+                        "disconnect".to_string(),
+                        PrismaValue::Object(
+                            transform_equals(
+                                where_params
+                                    .into_iter()
+                                    .map(Into::<super::ebook_in_wish_list::WhereParam>::into),
+                            )
+                            .into_iter()
+                            .collect(),
+                        ),
+                    )]),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum OrderByParam {
+        Id(Direction),
+        Url(Direction),
+        ScrapedAt(Direction),
+        Title(Direction),
+    }
+    impl Into<(String, PrismaValue)> for OrderByParam {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                Self::Id(direction) => {
+                    ("id".to_string(), PrismaValue::String(direction.to_string()))
+                }
+                Self::Url(direction) => (
+                    "url".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::ScrapedAt(direction) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::Title(direction) => (
+                    "title".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum Cursor {
+        Id(String),
+        Url(String),
+    }
+    impl Into<(String, PrismaValue)> for Cursor {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                Self::Id(cursor) => ("id".to_string(), PrismaValue::String(cursor)),
+                Self::Url(cursor) => ("url".to_string(), PrismaValue::String(cursor)),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum WhereParam {
+        Not(Vec<WhereParam>),
+        Or(Vec<WhereParam>),
+        And(Vec<WhereParam>),
+        IdEquals(String),
+        IdInVec(Vec<String>),
+        IdNotInVec(Vec<String>),
+        IdLt(String),
+        IdLte(String),
+        IdGt(String),
+        IdGte(String),
+        IdContains(String),
+        IdStartsWith(String),
+        IdEndsWith(String),
+        IdMode(QueryMode),
+        IdNot(String),
+        UrlEquals(String),
+        UrlInVec(Vec<String>),
+        UrlNotInVec(Vec<String>),
+        UrlLt(String),
+        UrlLte(String),
+        UrlGt(String),
+        UrlGte(String),
+        UrlContains(String),
+        UrlStartsWith(String),
+        UrlEndsWith(String),
+        UrlMode(QueryMode),
+        UrlNot(String),
+        ScrapedAtEquals(i32),
+        ScrapedAtInVec(Vec<i32>),
+        ScrapedAtNotInVec(Vec<i32>),
+        ScrapedAtLt(i32),
+        ScrapedAtLte(i32),
+        ScrapedAtGt(i32),
+        ScrapedAtGte(i32),
+        ScrapedAtNot(i32),
+        TitleEquals(String),
+        TitleInVec(Vec<String>),
+        TitleNotInVec(Vec<String>),
+        TitleLt(String),
+        TitleLte(String),
+        TitleGt(String),
+        TitleGte(String),
+        TitleContains(String),
+        TitleStartsWith(String),
+        TitleEndsWith(String),
+        TitleMode(QueryMode),
+        TitleNot(String),
+        EbookInWishListSome(Vec<super::ebook_in_wish_list::WhereParam>),
+        EbookInWishListEvery(Vec<super::ebook_in_wish_list::WhereParam>),
+        EbookInWishListNone(Vec<super::ebook_in_wish_list::WhereParam>),
+    }
+    impl Into<SerializedWhere> for WhereParam {
+        fn into(self) -> SerializedWhere {
+            match self {
+                Self::Not(value) => (
+                    "NOT".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::Or(value) => (
+                    "OR".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::And(value) => (
+                    "AND".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::IdEquals(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdInVec(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::IdNotInVec(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::IdLt(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdLte(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdGt(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdGte(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdContains(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdStartsWith(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdEndsWith(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdMode(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::IdNot(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlEquals(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlInVec(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::UrlNotInVec(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::UrlLt(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlLte(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlGt(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlGte(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlContains(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlStartsWith(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlEndsWith(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlMode(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::UrlNot(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ScrapedAtEquals(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtInVec(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::ScrapedAtNotInVec(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::ScrapedAtLt(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtLte(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtGt(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtGte(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtNot(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::TitleEquals(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleInVec(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::TitleNotInVec(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::TitleLt(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleLte(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleGt(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleGte(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleContains(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleStartsWith(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleEndsWith(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleMode(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::TitleNot(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookInWishListSome(value) => (
+                    "EbookInWishList".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "some".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookInWishListEvery(value) => (
+                    "EbookInWishList".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "every".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookInWishListNone(value) => (
+                    "EbookInWishList".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "none".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum UniqueWhereParam {
+        UrlEquals(String),
+        IdEquals(String),
+    }
+    impl From<UniqueWhereParam> for WhereParam {
+        fn from(value: UniqueWhereParam) -> Self {
+            match value {
+                UniqueWhereParam::UrlEquals(value) => Self::UrlEquals(value),
+                UniqueWhereParam::IdEquals(value) => Self::IdEquals(value),
+            }
+        }
+    }
+    impl From<Operator<Self>> for WhereParam {
+        fn from(op: Operator<Self>) -> Self {
+            match op {
+                Operator::Not(value) => Self::Not(value),
+                Operator::And(value) => Self::And(value),
+                Operator::Or(value) => Self::Or(value),
+            }
+        }
+    }
+    pub type UniqueArgs = prisma_client_rust::UniqueArgs<WithParam>;
+    pub type ManyArgs = prisma_client_rust::ManyArgs<WhereParam, WithParam, OrderByParam, Cursor>;
+    pub type Create<'a> = prisma_client_rust::Create<'a, SetParam, WithParam, Data>;
+    pub type FindUnique<'a> =
+        prisma_client_rust::FindUnique<'a, WhereParam, WithParam, SetParam, Data>;
+    pub type FindMany<'a> = prisma_client_rust::FindMany<
+        'a,
+        WhereParam,
+        WithParam,
+        OrderByParam,
+        Cursor,
+        SetParam,
+        Data,
+    >;
+    pub type FindFirst<'a> =
+        prisma_client_rust::FindFirst<'a, WhereParam, WithParam, OrderByParam, Cursor, Data>;
+    pub type Update<'a> = prisma_client_rust::Update<'a, WhereParam, WithParam, SetParam, Data>;
+    pub type UpdateMany<'a> = prisma_client_rust::UpdateMany<'a, WhereParam, SetParam>;
+    pub type Upsert<'a> = prisma_client_rust::Upsert<'a, WhereParam, SetParam, WithParam, Data>;
+    pub type Delete<'a> = prisma_client_rust::Delete<'a, WhereParam, WithParam, Data>;
+    pub type DeleteMany<'a> = prisma_client_rust::DeleteMany<'a, WhereParam>;
+    pub struct Actions<'a> {
+        pub client: &'a PrismaClient,
+    }
+    impl<'a> Actions<'a> {
+        pub fn create(
+            self,
+            url: url::Set,
+            scraped_at: scraped_at::Set,
+            title: title::Set,
+            mut _params: Vec<SetParam>,
+        ) -> Create<'a> {
+            _params.push(url.into());
+            _params.push(scraped_at.into());
+            _params.push(title.into());
+            Create::new(
+                self.client._new_query_context(),
+                QueryInfo::new("WishList", _outputs()),
+                _params,
+            )
+        }
+        pub fn find_unique(self, param: UniqueWhereParam) -> FindUnique<'a> {
+            FindUnique::new(
+                self.client._new_query_context(),
+                QueryInfo::new("WishList", _outputs()),
+                param.into(),
+            )
+        }
+        pub fn find_first(self, params: Vec<WhereParam>) -> FindFirst<'a> {
+            FindFirst::new(
+                self.client._new_query_context(),
+                QueryInfo::new("WishList", _outputs()),
+                params,
+            )
+        }
+        pub fn find_many(self, params: Vec<WhereParam>) -> FindMany<'a> {
+            FindMany::new(
+                self.client._new_query_context(),
+                QueryInfo::new("WishList", _outputs()),
+                params,
+            )
+        }
+        pub fn upsert(
+            self,
+            _where: UniqueWhereParam,
+            _create: (url::Set, scraped_at::Set, title::Set, Vec<SetParam>),
+            _update: Vec<SetParam>,
+        ) -> Upsert<'a> {
+            let (url, scraped_at, title, mut _params) = _create;
+            _params.push(url.into());
+            _params.push(scraped_at.into());
+            _params.push(title.into());
+            Upsert::new(
+                self.client._new_query_context(),
+                QueryInfo::new("WishList", _outputs()),
+                _where.into(),
+                _params,
+                _update,
+            )
+        }
+    }
+}
+pub mod ebook {
+    use super::_prisma::*;
+    use super::*;
+    pub mod id {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals<T: From<UniqueWhereParam>>(value: String) -> T {
+            UniqueWhereParam::IdEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Id(direction)
+        }
+        pub fn cursor(cursor: String) -> Cursor {
+            Cursor::Id(cursor)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::IdInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::IdNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::IdLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::IdLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::IdGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::IdGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::IdContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::IdStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::IdEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::IdMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::IdNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetId(value.0)
+            }
+        }
+    }
+    pub mod url {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals<T: From<UniqueWhereParam>>(value: String) -> T {
+            UniqueWhereParam::UrlEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Url(direction)
+        }
+        pub fn cursor(cursor: String) -> Cursor {
+            Cursor::Url(cursor)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::UrlInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::UrlNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::UrlLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::UrlLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::UrlGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::UrlGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::UrlContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::UrlStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::UrlEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::UrlMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::UrlNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetUrl(value.0)
+            }
+        }
+    }
+    pub mod snapshots {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn some(value: Vec<ebook_snapshot::WhereParam>) -> WhereParam {
+            WhereParam::SnapshotsSome(value)
+        }
+        pub fn every(value: Vec<ebook_snapshot::WhereParam>) -> WhereParam {
+            WhereParam::SnapshotsEvery(value)
+        }
+        pub fn none(value: Vec<ebook_snapshot::WhereParam>) -> WhereParam {
+            WhereParam::SnapshotsNone(value)
+        }
+        pub struct Fetch {
+            args: ebook_snapshot::ManyArgs,
+        }
+        impl Fetch {
+            pub fn with(mut self, params: impl Into<ebook_snapshot::WithParam>) -> Self {
+                self.args = self.args.with(params.into());
+                self
+            }
+            pub fn order_by(mut self, param: ebook_snapshot::OrderByParam) -> Self {
+                self.args = self.args.order_by(param);
+                self
+            }
+            pub fn skip(mut self, value: i64) -> Self {
+                self.args = self.args.skip(value);
+                self
+            }
+            pub fn take(mut self, value: i64) -> Self {
+                self.args = self.args.take(value);
+                self
+            }
+            pub fn cursor(mut self, value: impl Into<ebook_snapshot::Cursor>) -> Self {
+                self.args = self.args.cursor(value.into());
+                self
+            }
+        }
+        impl From<Fetch> for WithParam {
+            fn from(fetch: Fetch) -> Self {
+                WithParam::Snapshots(fetch.args)
+            }
+        }
+        pub fn fetch(params: Vec<ebook_snapshot::WhereParam>) -> Fetch {
+            Fetch {
+                args: ebook_snapshot::ManyArgs::new(params),
+            }
+        }
+        pub fn link<T: From<Link>>(params: Vec<ebook_snapshot::UniqueWhereParam>) -> T {
+            Link(params).into()
+        }
+        pub fn unlink(params: Vec<ebook_snapshot::UniqueWhereParam>) -> SetParam {
+            SetParam::UnlinkSnapshots(params)
+        }
+        pub struct Link(Vec<ebook_snapshot::UniqueWhereParam>);
+        impl From<Link> for SetParam {
+            fn from(value: Link) -> Self {
+                Self::LinkSnapshots(value.0)
+            }
+        }
+    }
+    pub mod ebook_in_wish_list {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn some(value: Vec<ebook_in_wish_list::WhereParam>) -> WhereParam {
+            WhereParam::EbookInWishListSome(value)
+        }
+        pub fn every(value: Vec<ebook_in_wish_list::WhereParam>) -> WhereParam {
+            WhereParam::EbookInWishListEvery(value)
+        }
+        pub fn none(value: Vec<ebook_in_wish_list::WhereParam>) -> WhereParam {
+            WhereParam::EbookInWishListNone(value)
+        }
+        pub struct Fetch {
+            args: ebook_in_wish_list::ManyArgs,
+        }
+        impl Fetch {
+            pub fn with(mut self, params: impl Into<ebook_in_wish_list::WithParam>) -> Self {
+                self.args = self.args.with(params.into());
+                self
+            }
+            pub fn order_by(mut self, param: ebook_in_wish_list::OrderByParam) -> Self {
+                self.args = self.args.order_by(param);
+                self
+            }
+            pub fn skip(mut self, value: i64) -> Self {
+                self.args = self.args.skip(value);
+                self
+            }
+            pub fn take(mut self, value: i64) -> Self {
+                self.args = self.args.take(value);
+                self
+            }
+            pub fn cursor(mut self, value: impl Into<ebook_in_wish_list::Cursor>) -> Self {
+                self.args = self.args.cursor(value.into());
+                self
+            }
+        }
+        impl From<Fetch> for WithParam {
+            fn from(fetch: Fetch) -> Self {
+                WithParam::EbookInWishList(fetch.args)
+            }
+        }
+        pub fn fetch(params: Vec<ebook_in_wish_list::WhereParam>) -> Fetch {
+            Fetch {
+                args: ebook_in_wish_list::ManyArgs::new(params),
+            }
+        }
+        pub fn link<T: From<Link>>(params: Vec<ebook_in_wish_list::UniqueWhereParam>) -> T {
+            Link(params).into()
+        }
+        pub fn unlink(params: Vec<ebook_in_wish_list::UniqueWhereParam>) -> SetParam {
+            SetParam::UnlinkEbookInWishList(params)
+        }
+        pub struct Link(Vec<ebook_in_wish_list::UniqueWhereParam>);
+        impl From<Link> for SetParam {
+            fn from(value: Link) -> Self {
+                Self::LinkEbookInWishList(value.0)
+            }
+        }
+    }
+    pub fn _outputs() -> Vec<Selection> {
+        ["id", "url"]
+            .into_iter()
+            .map(|o| {
+                let builder = Selection::builder(o);
+                builder.build()
+            })
+            .collect()
+    }
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub struct Data {
+        #[serde(rename = "id")]
+        pub id: String,
+        #[serde(rename = "url")]
+        pub url: String,
+        #[serde(rename = "snapshots")]
+        pub snapshots: Option<Vec<super::ebook_snapshot::Data>>,
+        #[serde(rename = "EbookInWishList")]
+        pub ebook_in_wish_list: Option<Vec<super::ebook_in_wish_list::Data>>,
+    }
+    impl Data {
+        pub fn snapshots(&self) -> Result<&Vec<super::ebook_snapshot::Data>, &'static str> {
+            self.snapshots.as_ref().ok_or(
+                "Attempted to access 'snapshots' but did not fetch it using the .with() syntax",
+            )
+        }
+        pub fn ebook_in_wish_list(
+            &self,
+        ) -> Result<&Vec<super::ebook_in_wish_list::Data>, &'static str> {
+            self . ebook_in_wish_list . as_ref () . ok_or ("Attempted to access 'ebook_in_wish_list' but did not fetch it using the .with() syntax")
+        }
+    }
+    #[derive(Clone)]
+    pub enum WithParam {
+        Snapshots(super::ebook_snapshot::ManyArgs),
+        EbookInWishList(super::ebook_in_wish_list::ManyArgs),
+    }
+    impl Into<Selection> for WithParam {
+        fn into(self) -> Selection {
+            match self {
+                Self::Snapshots(args) => {
+                    let (arguments, mut nested_selections) = args.to_graphql();
+                    nested_selections.extend(super::ebook_snapshot::_outputs());
+                    let mut builder = Selection::builder("snapshots");
+                    builder
+                        .nested_selections(nested_selections)
+                        .set_arguments(arguments);
+                    builder.build()
+                }
+                Self::EbookInWishList(args) => {
+                    let (arguments, mut nested_selections) = args.to_graphql();
+                    nested_selections.extend(super::ebook_in_wish_list::_outputs());
+                    let mut builder = Selection::builder("EbookInWishList");
+                    builder
+                        .nested_selections(nested_selections)
+                        .set_arguments(arguments);
+                    builder.build()
+                }
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum SetParam {
+        SetId(String),
+        SetUrl(String),
+        LinkSnapshots(Vec<super::ebook_snapshot::UniqueWhereParam>),
+        UnlinkSnapshots(Vec<super::ebook_snapshot::UniqueWhereParam>),
+        LinkEbookInWishList(Vec<super::ebook_in_wish_list::UniqueWhereParam>),
+        UnlinkEbookInWishList(Vec<super::ebook_in_wish_list::UniqueWhereParam>),
+    }
+    impl Into<(String, PrismaValue)> for SetParam {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                SetParam::SetId(value) => ("id".to_string(), PrismaValue::String(value)),
+                SetParam::SetUrl(value) => ("url".to_string(), PrismaValue::String(value)),
+                SetParam::LinkSnapshots(where_params) => (
+                    "snapshots".to_string(),
+                    PrismaValue::Object(vec![(
+                        "connect".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            where_params
+                                .into_iter()
+                                .map(Into::<super::ebook_snapshot::WhereParam>::into),
+                        )),
+                    )]),
+                ),
+                SetParam::UnlinkSnapshots(where_params) => (
+                    "snapshots".to_string(),
+                    PrismaValue::Object(vec![(
+                        "disconnect".to_string(),
+                        PrismaValue::Object(
+                            transform_equals(
+                                where_params
+                                    .into_iter()
+                                    .map(Into::<super::ebook_snapshot::WhereParam>::into),
+                            )
+                            .into_iter()
+                            .collect(),
+                        ),
+                    )]),
+                ),
+                SetParam::LinkEbookInWishList(where_params) => (
+                    "EbookInWishList".to_string(),
+                    PrismaValue::Object(vec![(
+                        "connect".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            where_params
+                                .into_iter()
+                                .map(Into::<super::ebook_in_wish_list::WhereParam>::into),
+                        )),
+                    )]),
+                ),
+                SetParam::UnlinkEbookInWishList(where_params) => (
+                    "EbookInWishList".to_string(),
+                    PrismaValue::Object(vec![(
+                        "disconnect".to_string(),
+                        PrismaValue::Object(
+                            transform_equals(
+                                where_params
+                                    .into_iter()
+                                    .map(Into::<super::ebook_in_wish_list::WhereParam>::into),
+                            )
+                            .into_iter()
+                            .collect(),
+                        ),
+                    )]),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum OrderByParam {
+        Id(Direction),
+        Url(Direction),
+    }
+    impl Into<(String, PrismaValue)> for OrderByParam {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                Self::Id(direction) => {
+                    ("id".to_string(), PrismaValue::String(direction.to_string()))
+                }
+                Self::Url(direction) => (
+                    "url".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum Cursor {
+        Id(String),
+        Url(String),
+    }
+    impl Into<(String, PrismaValue)> for Cursor {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                Self::Id(cursor) => ("id".to_string(), PrismaValue::String(cursor)),
+                Self::Url(cursor) => ("url".to_string(), PrismaValue::String(cursor)),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum WhereParam {
+        Not(Vec<WhereParam>),
+        Or(Vec<WhereParam>),
+        And(Vec<WhereParam>),
+        IdEquals(String),
+        IdInVec(Vec<String>),
+        IdNotInVec(Vec<String>),
+        IdLt(String),
+        IdLte(String),
+        IdGt(String),
+        IdGte(String),
+        IdContains(String),
+        IdStartsWith(String),
+        IdEndsWith(String),
+        IdMode(QueryMode),
+        IdNot(String),
+        UrlEquals(String),
+        UrlInVec(Vec<String>),
+        UrlNotInVec(Vec<String>),
+        UrlLt(String),
+        UrlLte(String),
+        UrlGt(String),
+        UrlGte(String),
+        UrlContains(String),
+        UrlStartsWith(String),
+        UrlEndsWith(String),
+        UrlMode(QueryMode),
+        UrlNot(String),
+        SnapshotsSome(Vec<super::ebook_snapshot::WhereParam>),
+        SnapshotsEvery(Vec<super::ebook_snapshot::WhereParam>),
+        SnapshotsNone(Vec<super::ebook_snapshot::WhereParam>),
+        EbookInWishListSome(Vec<super::ebook_in_wish_list::WhereParam>),
+        EbookInWishListEvery(Vec<super::ebook_in_wish_list::WhereParam>),
+        EbookInWishListNone(Vec<super::ebook_in_wish_list::WhereParam>),
+    }
+    impl Into<SerializedWhere> for WhereParam {
+        fn into(self) -> SerializedWhere {
+            match self {
+                Self::Not(value) => (
+                    "NOT".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::Or(value) => (
+                    "OR".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::And(value) => (
+                    "AND".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::IdEquals(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdInVec(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::IdNotInVec(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::IdLt(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdLte(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdGt(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdGte(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdContains(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdStartsWith(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdEndsWith(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdMode(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::IdNot(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlEquals(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlInVec(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::UrlNotInVec(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::UrlLt(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlLte(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlGt(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlGte(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlContains(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlStartsWith(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlEndsWith(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::UrlMode(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::UrlNot(value) => (
+                    "url".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::SnapshotsSome(value) => (
+                    "snapshots".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "some".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::SnapshotsEvery(value) => (
+                    "snapshots".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "every".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::SnapshotsNone(value) => (
+                    "snapshots".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "none".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookInWishListSome(value) => (
+                    "EbookInWishList".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "some".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookInWishListEvery(value) => (
+                    "EbookInWishList".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "every".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookInWishListNone(value) => (
+                    "EbookInWishList".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "none".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum UniqueWhereParam {
+        UrlEquals(String),
+        IdEquals(String),
+    }
+    impl From<UniqueWhereParam> for WhereParam {
+        fn from(value: UniqueWhereParam) -> Self {
+            match value {
+                UniqueWhereParam::UrlEquals(value) => Self::UrlEquals(value),
+                UniqueWhereParam::IdEquals(value) => Self::IdEquals(value),
+            }
+        }
+    }
+    impl From<Operator<Self>> for WhereParam {
+        fn from(op: Operator<Self>) -> Self {
+            match op {
+                Operator::Not(value) => Self::Not(value),
+                Operator::And(value) => Self::And(value),
+                Operator::Or(value) => Self::Or(value),
+            }
+        }
+    }
+    pub type UniqueArgs = prisma_client_rust::UniqueArgs<WithParam>;
+    pub type ManyArgs = prisma_client_rust::ManyArgs<WhereParam, WithParam, OrderByParam, Cursor>;
+    pub type Create<'a> = prisma_client_rust::Create<'a, SetParam, WithParam, Data>;
+    pub type FindUnique<'a> =
+        prisma_client_rust::FindUnique<'a, WhereParam, WithParam, SetParam, Data>;
+    pub type FindMany<'a> = prisma_client_rust::FindMany<
+        'a,
+        WhereParam,
+        WithParam,
+        OrderByParam,
+        Cursor,
+        SetParam,
+        Data,
+    >;
+    pub type FindFirst<'a> =
+        prisma_client_rust::FindFirst<'a, WhereParam, WithParam, OrderByParam, Cursor, Data>;
+    pub type Update<'a> = prisma_client_rust::Update<'a, WhereParam, WithParam, SetParam, Data>;
+    pub type UpdateMany<'a> = prisma_client_rust::UpdateMany<'a, WhereParam, SetParam>;
+    pub type Upsert<'a> = prisma_client_rust::Upsert<'a, WhereParam, SetParam, WithParam, Data>;
+    pub type Delete<'a> = prisma_client_rust::Delete<'a, WhereParam, WithParam, Data>;
+    pub type DeleteMany<'a> = prisma_client_rust::DeleteMany<'a, WhereParam>;
+    pub struct Actions<'a> {
+        pub client: &'a PrismaClient,
+    }
+    impl<'a> Actions<'a> {
+        pub fn create(self, url: url::Set, mut _params: Vec<SetParam>) -> Create<'a> {
+            _params.push(url.into());
+            Create::new(
+                self.client._new_query_context(),
+                QueryInfo::new("Ebook", _outputs()),
+                _params,
+            )
+        }
+        pub fn find_unique(self, param: UniqueWhereParam) -> FindUnique<'a> {
+            FindUnique::new(
+                self.client._new_query_context(),
+                QueryInfo::new("Ebook", _outputs()),
+                param.into(),
+            )
+        }
+        pub fn find_first(self, params: Vec<WhereParam>) -> FindFirst<'a> {
+            FindFirst::new(
+                self.client._new_query_context(),
+                QueryInfo::new("Ebook", _outputs()),
+                params,
+            )
+        }
+        pub fn find_many(self, params: Vec<WhereParam>) -> FindMany<'a> {
+            FindMany::new(
+                self.client._new_query_context(),
+                QueryInfo::new("Ebook", _outputs()),
+                params,
+            )
+        }
+        pub fn upsert(
+            self,
+            _where: UniqueWhereParam,
+            _create: (url::Set, Vec<SetParam>),
+            _update: Vec<SetParam>,
+        ) -> Upsert<'a> {
+            let (url, mut _params) = _create;
+            _params.push(url.into());
+            Upsert::new(
+                self.client._new_query_context(),
+                QueryInfo::new("Ebook", _outputs()),
+                _where.into(),
+                _params,
+                _update,
+            )
+        }
+    }
+}
+pub mod ebook_in_wish_list {
+    use super::_prisma::*;
+    use super::*;
+    pub mod wish_list {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn is(value: Vec<wish_list::WhereParam>) -> WhereParam {
+            WhereParam::WishListIs(value)
+        }
+        pub fn is_not(value: Vec<wish_list::WhereParam>) -> WhereParam {
+            WhereParam::WishListIsNot(value)
+        }
+        pub struct Fetch {
+            args: wish_list::UniqueArgs,
+        }
+        impl Fetch {
+            pub fn with(mut self, params: impl Into<wish_list::WithParam>) -> Self {
+                self.args = self.args.with(params.into());
+                self
+            }
+        }
+        impl From<Fetch> for WithParam {
+            fn from(fetch: Fetch) -> Self {
+                WithParam::WishList(fetch.args)
+            }
+        }
+        pub fn fetch() -> Fetch {
+            Fetch {
+                args: wish_list::UniqueArgs::new(),
+            }
+        }
+        pub fn link<T: From<Link>>(value: wish_list::UniqueWhereParam) -> T {
+            Link(value).into()
+        }
+        pub struct Link(wish_list::UniqueWhereParam);
+        impl From<Link> for SetParam {
+            fn from(value: Link) -> Self {
+                Self::LinkWishList(value.0)
+            }
+        }
+    }
+    pub mod wish_list_id {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: String) -> WhereParam {
+            WhereParam::WishListIdEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::WishListId(direction)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::WishListIdInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::WishListIdNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::WishListIdLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::WishListIdLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::WishListIdGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::WishListIdGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::WishListIdContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::WishListIdStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::WishListIdEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::WishListIdMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::WishListIdNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetWishListId(value.0)
+            }
+        }
+    }
+    pub mod ebook {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn is(value: Vec<ebook::WhereParam>) -> WhereParam {
+            WhereParam::EbookIs(value)
+        }
+        pub fn is_not(value: Vec<ebook::WhereParam>) -> WhereParam {
+            WhereParam::EbookIsNot(value)
+        }
+        pub struct Fetch {
+            args: ebook::UniqueArgs,
+        }
+        impl Fetch {
+            pub fn with(mut self, params: impl Into<ebook::WithParam>) -> Self {
+                self.args = self.args.with(params.into());
+                self
+            }
+        }
+        impl From<Fetch> for WithParam {
+            fn from(fetch: Fetch) -> Self {
+                WithParam::Ebook(fetch.args)
+            }
+        }
+        pub fn fetch() -> Fetch {
+            Fetch {
+                args: ebook::UniqueArgs::new(),
+            }
+        }
+        pub fn link<T: From<Link>>(value: ebook::UniqueWhereParam) -> T {
+            Link(value).into()
+        }
+        pub struct Link(ebook::UniqueWhereParam);
+        impl From<Link> for SetParam {
+            fn from(value: Link) -> Self {
+                Self::LinkEbook(value.0)
+            }
+        }
+    }
+    pub mod ebook_id {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: String) -> WhereParam {
+            WhereParam::EbookIdEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::EbookId(direction)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::EbookIdInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::EbookIdNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::EbookIdLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::EbookIdLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::EbookIdGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::EbookIdGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::EbookIdContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::EbookIdStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::EbookIdEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::EbookIdMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::EbookIdNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetEbookId(value.0)
+            }
+        }
+    }
+    pub fn wish_list_id_ebook_id<T: From<UniqueWhereParam>>(
+        wish_list_id: String,
+        ebook_id: String,
+    ) -> T {
+        UniqueWhereParam::WishListIdEbookIdEquals(wish_list_id, ebook_id).into()
+    }
+    pub fn _outputs() -> Vec<Selection> {
+        ["wishListId", "ebookId"]
+            .into_iter()
+            .map(|o| {
+                let builder = Selection::builder(o);
+                builder.build()
+            })
+            .collect()
+    }
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub struct Data {
+        #[serde(rename = "wishList")]
+        pub wish_list: Option<Box<super::wish_list::Data>>,
+        #[serde(rename = "wishListId")]
+        pub wish_list_id: String,
+        #[serde(rename = "ebook")]
+        pub ebook: Option<Box<super::ebook::Data>>,
+        #[serde(rename = "ebookId")]
+        pub ebook_id: String,
+    }
+    impl Data {
+        pub fn wish_list(&self) -> Result<&super::wish_list::Data, &'static str> {
+            self.wish_list
+                .as_ref()
+                .ok_or(
+                    "Attempted to access 'wish_list' but did not fetch it using the .with() syntax",
+                )
+                .map(|v| v.as_ref())
+        }
+        pub fn ebook(&self) -> Result<&super::ebook::Data, &'static str> {
+            self.ebook
+                .as_ref()
+                .ok_or("Attempted to access 'ebook' but did not fetch it using the .with() syntax")
+                .map(|v| v.as_ref())
+        }
+    }
+    #[derive(Clone)]
+    pub enum WithParam {
+        WishList(super::wish_list::UniqueArgs),
+        Ebook(super::ebook::UniqueArgs),
+    }
+    impl Into<Selection> for WithParam {
+        fn into(self) -> Selection {
+            match self {
+                Self::WishList(args) => {
+                    let mut selections = super::wish_list::_outputs();
+                    selections.extend(args.with_params.into_iter().map(Into::<Selection>::into));
+                    let mut builder = Selection::builder("wishList");
+                    builder.nested_selections(selections);
+                    builder.build()
+                }
+                Self::Ebook(args) => {
+                    let mut selections = super::ebook::_outputs();
+                    selections.extend(args.with_params.into_iter().map(Into::<Selection>::into));
+                    let mut builder = Selection::builder("ebook");
+                    builder.nested_selections(selections);
+                    builder.build()
+                }
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum SetParam {
+        LinkWishList(super::wish_list::UniqueWhereParam),
+        SetWishListId(String),
+        LinkEbook(super::ebook::UniqueWhereParam),
+        SetEbookId(String),
+    }
+    impl Into<(String, PrismaValue)> for SetParam {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                SetParam::LinkWishList(where_param) => (
+                    "wishList".to_string(),
+                    PrismaValue::Object(vec![(
+                        "connect".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            vec![Into::<super::wish_list::WhereParam>::into(where_param)]
+                                .into_iter(),
+                        )),
+                    )]),
+                ),
+                SetParam::SetWishListId(value) => {
+                    ("wishListId".to_string(), PrismaValue::String(value))
+                }
+                SetParam::LinkEbook(where_param) => (
+                    "ebook".to_string(),
+                    PrismaValue::Object(vec![(
+                        "connect".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            vec![Into::<super::ebook::WhereParam>::into(where_param)].into_iter(),
+                        )),
+                    )]),
+                ),
+                SetParam::SetEbookId(value) => ("ebookId".to_string(), PrismaValue::String(value)),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum OrderByParam {
+        WishListId(Direction),
+        EbookId(Direction),
+    }
+    impl Into<(String, PrismaValue)> for OrderByParam {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                Self::WishListId(direction) => (
+                    "wishListId".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::EbookId(direction) => (
+                    "ebookId".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum Cursor {}
+    impl Into<(String, PrismaValue)> for Cursor {
+        fn into(self) -> (String, PrismaValue) {
+            match self {}
+        }
+    }
+    #[derive(Clone)]
+    pub enum WhereParam {
+        Not(Vec<WhereParam>),
+        Or(Vec<WhereParam>),
+        And(Vec<WhereParam>),
+        WishListIdEbookIdEquals(String, String),
+        WishListIs(Vec<super::wish_list::WhereParam>),
+        WishListIsNot(Vec<super::wish_list::WhereParam>),
+        WishListIdEquals(String),
+        WishListIdInVec(Vec<String>),
+        WishListIdNotInVec(Vec<String>),
+        WishListIdLt(String),
+        WishListIdLte(String),
+        WishListIdGt(String),
+        WishListIdGte(String),
+        WishListIdContains(String),
+        WishListIdStartsWith(String),
+        WishListIdEndsWith(String),
+        WishListIdMode(QueryMode),
+        WishListIdNot(String),
+        EbookIs(Vec<super::ebook::WhereParam>),
+        EbookIsNot(Vec<super::ebook::WhereParam>),
+        EbookIdEquals(String),
+        EbookIdInVec(Vec<String>),
+        EbookIdNotInVec(Vec<String>),
+        EbookIdLt(String),
+        EbookIdLte(String),
+        EbookIdGt(String),
+        EbookIdGte(String),
+        EbookIdContains(String),
+        EbookIdStartsWith(String),
+        EbookIdEndsWith(String),
+        EbookIdMode(QueryMode),
+        EbookIdNot(String),
+    }
+    impl Into<SerializedWhere> for WhereParam {
+        fn into(self) -> SerializedWhere {
+            match self {
+                Self::Not(value) => (
+                    "NOT".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::Or(value) => (
+                    "OR".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::And(value) => (
+                    "AND".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::WishListIdEbookIdEquals(wish_list_id, ebook_id) => (
+                    "wishListId_ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![
+                        ("wishListId".to_string(), PrismaValue::String(wish_list_id)),
+                        ("ebookId".to_string(), PrismaValue::String(ebook_id)),
+                    ]),
+                ),
+                Self::WishListIs(value) => (
+                    "wishList".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "is".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::WishListIsNot(value) => (
+                    "wishList".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "isNot".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::WishListIdEquals(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::WishListIdInVec(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::WishListIdNotInVec(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::WishListIdLt(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::WishListIdLte(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::WishListIdGt(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::WishListIdGte(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::WishListIdContains(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::WishListIdStartsWith(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::WishListIdEndsWith(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::WishListIdMode(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::WishListIdNot(value) => (
+                    "wishListId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIs(value) => (
+                    "ebook".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "is".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookIsNot(value) => (
+                    "ebook".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "isNot".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookIdEquals(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdInVec(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::EbookIdNotInVec(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::EbookIdLt(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdLte(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdGt(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdGte(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdContains(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdStartsWith(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdEndsWith(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdMode(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::EbookIdNot(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum UniqueWhereParam {
+        WishListIdEbookIdEquals(String, String),
+    }
+    impl From<UniqueWhereParam> for WhereParam {
+        fn from(value: UniqueWhereParam) -> Self {
+            match value {
+                UniqueWhereParam::WishListIdEbookIdEquals(wish_list_id, ebook_id) => {
+                    Self::WishListIdEbookIdEquals(wish_list_id, ebook_id)
+                }
+            }
+        }
+    }
+    impl From<Operator<Self>> for WhereParam {
+        fn from(op: Operator<Self>) -> Self {
+            match op {
+                Operator::Not(value) => Self::Not(value),
+                Operator::And(value) => Self::And(value),
+                Operator::Or(value) => Self::Or(value),
+            }
+        }
+    }
+    pub type UniqueArgs = prisma_client_rust::UniqueArgs<WithParam>;
+    pub type ManyArgs = prisma_client_rust::ManyArgs<WhereParam, WithParam, OrderByParam, Cursor>;
+    pub type Create<'a> = prisma_client_rust::Create<'a, SetParam, WithParam, Data>;
+    pub type FindUnique<'a> =
+        prisma_client_rust::FindUnique<'a, WhereParam, WithParam, SetParam, Data>;
+    pub type FindMany<'a> = prisma_client_rust::FindMany<
+        'a,
+        WhereParam,
+        WithParam,
+        OrderByParam,
+        Cursor,
+        SetParam,
+        Data,
+    >;
+    pub type FindFirst<'a> =
+        prisma_client_rust::FindFirst<'a, WhereParam, WithParam, OrderByParam, Cursor, Data>;
+    pub type Update<'a> = prisma_client_rust::Update<'a, WhereParam, WithParam, SetParam, Data>;
+    pub type UpdateMany<'a> = prisma_client_rust::UpdateMany<'a, WhereParam, SetParam>;
+    pub type Upsert<'a> = prisma_client_rust::Upsert<'a, WhereParam, SetParam, WithParam, Data>;
+    pub type Delete<'a> = prisma_client_rust::Delete<'a, WhereParam, WithParam, Data>;
+    pub type DeleteMany<'a> = prisma_client_rust::DeleteMany<'a, WhereParam>;
+    pub struct Actions<'a> {
+        pub client: &'a PrismaClient,
+    }
+    impl<'a> Actions<'a> {
+        pub fn create(
+            self,
+            wish_list: wish_list::Link,
+            ebook: ebook::Link,
+            mut _params: Vec<SetParam>,
+        ) -> Create<'a> {
+            _params.push(wish_list.into());
+            _params.push(ebook.into());
+            Create::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookInWishList", _outputs()),
+                _params,
+            )
+        }
+        pub fn find_unique(self, param: UniqueWhereParam) -> FindUnique<'a> {
+            FindUnique::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookInWishList", _outputs()),
+                param.into(),
+            )
+        }
+        pub fn find_first(self, params: Vec<WhereParam>) -> FindFirst<'a> {
+            FindFirst::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookInWishList", _outputs()),
+                params,
+            )
+        }
+        pub fn find_many(self, params: Vec<WhereParam>) -> FindMany<'a> {
+            FindMany::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookInWishList", _outputs()),
+                params,
+            )
+        }
+        pub fn upsert(
+            self,
+            _where: UniqueWhereParam,
+            _create: (wish_list::Link, ebook::Link, Vec<SetParam>),
+            _update: Vec<SetParam>,
+        ) -> Upsert<'a> {
+            let (wish_list, ebook, mut _params) = _create;
+            _params.push(wish_list.into());
+            _params.push(ebook.into());
+            Upsert::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookInWishList", _outputs()),
+                _where.into(),
+                _params,
+                _update,
+            )
+        }
+    }
+}
+pub mod ebook_snapshot {
+    use super::_prisma::*;
+    use super::*;
+    pub mod id {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals<T: From<UniqueWhereParam>>(value: String) -> T {
+            UniqueWhereParam::IdEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Id(direction)
+        }
+        pub fn cursor(cursor: String) -> Cursor {
+            Cursor::Id(cursor)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::IdInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::IdNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::IdLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::IdLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::IdGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::IdGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::IdContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::IdStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::IdEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::IdMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::IdNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetId(value.0)
+            }
+        }
+    }
+    pub mod ebook {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn is(value: Vec<ebook::WhereParam>) -> WhereParam {
+            WhereParam::EbookIs(value)
+        }
+        pub fn is_not(value: Vec<ebook::WhereParam>) -> WhereParam {
+            WhereParam::EbookIsNot(value)
+        }
+        pub struct Fetch {
+            args: ebook::UniqueArgs,
+        }
+        impl Fetch {
+            pub fn with(mut self, params: impl Into<ebook::WithParam>) -> Self {
+                self.args = self.args.with(params.into());
+                self
+            }
+        }
+        impl From<Fetch> for WithParam {
+            fn from(fetch: Fetch) -> Self {
+                WithParam::Ebook(fetch.args)
+            }
+        }
+        pub fn fetch() -> Fetch {
+            Fetch {
+                args: ebook::UniqueArgs::new(),
+            }
+        }
+        pub fn link<T: From<Link>>(value: ebook::UniqueWhereParam) -> T {
+            Link(value).into()
+        }
+        pub struct Link(ebook::UniqueWhereParam);
+        impl From<Link> for SetParam {
+            fn from(value: Link) -> Self {
+                Self::LinkEbook(value.0)
+            }
+        }
+    }
+    pub mod ebook_id {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: String) -> WhereParam {
+            WhereParam::EbookIdEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::EbookId(direction)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::EbookIdInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::EbookIdNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::EbookIdLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::EbookIdLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::EbookIdGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::EbookIdGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::EbookIdContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::EbookIdStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::EbookIdEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::EbookIdMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::EbookIdNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetEbookId(value.0)
+            }
+        }
+    }
+    pub mod title {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: String) -> WhereParam {
+            WhereParam::TitleEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Title(direction)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::TitleInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::TitleNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::TitleLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::TitleLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::TitleGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::TitleGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::TitleContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::TitleStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::TitleEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::TitleMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::TitleNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetTitle(value.0)
+            }
+        }
+    }
+    pub mod scraped_at {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: i32) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::ScrapedAt(direction)
+        }
+        pub fn in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::ScrapedAtInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::ScrapedAtNotInVec(value)
+        }
+        pub fn lt(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtLt(value)
+        }
+        pub fn lte(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtLte(value)
+        }
+        pub fn gt(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtGt(value)
+        }
+        pub fn gte(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtGte(value)
+        }
+        pub fn not(value: i32) -> WhereParam {
+            WhereParam::ScrapedAtNot(value)
+        }
+        pub fn increment(value: i32) -> SetParam {
+            SetParam::IncrementScrapedAt(value)
+        }
+        pub fn decrement(value: i32) -> SetParam {
+            SetParam::DecrementScrapedAt(value)
+        }
+        pub fn multiply(value: i32) -> SetParam {
+            SetParam::MultiplyScrapedAt(value)
+        }
+        pub fn divide(value: i32) -> SetParam {
+            SetParam::DivideScrapedAt(value)
+        }
+        pub struct Set(i32);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetScrapedAt(value.0)
+            }
+        }
+    }
+    pub mod thumbnail_url {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: String) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::ThumbnailUrl(direction)
+        }
+        pub fn in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::ThumbnailUrlInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<String>) -> WhereParam {
+            WhereParam::ThumbnailUrlNotInVec(value)
+        }
+        pub fn lt(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlLt(value)
+        }
+        pub fn lte(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlLte(value)
+        }
+        pub fn gt(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlGt(value)
+        }
+        pub fn gte(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlGte(value)
+        }
+        pub fn contains(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlContains(value)
+        }
+        pub fn starts_with(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlStartsWith(value)
+        }
+        pub fn ends_with(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlEndsWith(value)
+        }
+        pub fn mode(value: QueryMode) -> WhereParam {
+            WhereParam::ThumbnailUrlMode(value)
+        }
+        pub fn not(value: String) -> WhereParam {
+            WhereParam::ThumbnailUrlNot(value)
+        }
+        pub struct Set(String);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetThumbnailUrl(value.0)
+            }
+        }
+    }
+    pub mod price {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: i32) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: i32) -> WhereParam {
+            WhereParam::PriceEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Price(direction)
+        }
+        pub fn in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::PriceInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::PriceNotInVec(value)
+        }
+        pub fn lt(value: i32) -> WhereParam {
+            WhereParam::PriceLt(value)
+        }
+        pub fn lte(value: i32) -> WhereParam {
+            WhereParam::PriceLte(value)
+        }
+        pub fn gt(value: i32) -> WhereParam {
+            WhereParam::PriceGt(value)
+        }
+        pub fn gte(value: i32) -> WhereParam {
+            WhereParam::PriceGte(value)
+        }
+        pub fn not(value: i32) -> WhereParam {
+            WhereParam::PriceNot(value)
+        }
+        pub fn increment(value: i32) -> SetParam {
+            SetParam::IncrementPrice(value)
+        }
+        pub fn decrement(value: i32) -> SetParam {
+            SetParam::DecrementPrice(value)
+        }
+        pub fn multiply(value: i32) -> SetParam {
+            SetParam::MultiplyPrice(value)
+        }
+        pub fn divide(value: i32) -> SetParam {
+            SetParam::DividePrice(value)
+        }
+        pub struct Set(i32);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetPrice(value.0)
+            }
+        }
+    }
+    pub mod discount {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: i32) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: i32) -> WhereParam {
+            WhereParam::DiscountEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Discount(direction)
+        }
+        pub fn in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::DiscountInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::DiscountNotInVec(value)
+        }
+        pub fn lt(value: i32) -> WhereParam {
+            WhereParam::DiscountLt(value)
+        }
+        pub fn lte(value: i32) -> WhereParam {
+            WhereParam::DiscountLte(value)
+        }
+        pub fn gt(value: i32) -> WhereParam {
+            WhereParam::DiscountGt(value)
+        }
+        pub fn gte(value: i32) -> WhereParam {
+            WhereParam::DiscountGte(value)
+        }
+        pub fn not(value: i32) -> WhereParam {
+            WhereParam::DiscountNot(value)
+        }
+        pub fn increment(value: i32) -> SetParam {
+            SetParam::IncrementDiscount(value)
+        }
+        pub fn decrement(value: i32) -> SetParam {
+            SetParam::DecrementDiscount(value)
+        }
+        pub fn multiply(value: i32) -> SetParam {
+            SetParam::MultiplyDiscount(value)
+        }
+        pub fn divide(value: i32) -> SetParam {
+            SetParam::DivideDiscount(value)
+        }
+        pub struct Set(i32);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetDiscount(value.0)
+            }
+        }
+    }
+    pub mod discount_rate {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: i32) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: i32) -> WhereParam {
+            WhereParam::DiscountRateEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::DiscountRate(direction)
+        }
+        pub fn in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::DiscountRateInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::DiscountRateNotInVec(value)
+        }
+        pub fn lt(value: i32) -> WhereParam {
+            WhereParam::DiscountRateLt(value)
+        }
+        pub fn lte(value: i32) -> WhereParam {
+            WhereParam::DiscountRateLte(value)
+        }
+        pub fn gt(value: i32) -> WhereParam {
+            WhereParam::DiscountRateGt(value)
+        }
+        pub fn gte(value: i32) -> WhereParam {
+            WhereParam::DiscountRateGte(value)
+        }
+        pub fn not(value: i32) -> WhereParam {
+            WhereParam::DiscountRateNot(value)
+        }
+        pub fn increment(value: i32) -> SetParam {
+            SetParam::IncrementDiscountRate(value)
+        }
+        pub fn decrement(value: i32) -> SetParam {
+            SetParam::DecrementDiscountRate(value)
+        }
+        pub fn multiply(value: i32) -> SetParam {
+            SetParam::MultiplyDiscountRate(value)
+        }
+        pub fn divide(value: i32) -> SetParam {
+            SetParam::DivideDiscountRate(value)
+        }
+        pub struct Set(i32);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetDiscountRate(value.0)
+            }
+        }
+    }
+    pub mod points {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: i32) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: i32) -> WhereParam {
+            WhereParam::PointsEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::Points(direction)
+        }
+        pub fn in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::PointsInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::PointsNotInVec(value)
+        }
+        pub fn lt(value: i32) -> WhereParam {
+            WhereParam::PointsLt(value)
+        }
+        pub fn lte(value: i32) -> WhereParam {
+            WhereParam::PointsLte(value)
+        }
+        pub fn gt(value: i32) -> WhereParam {
+            WhereParam::PointsGt(value)
+        }
+        pub fn gte(value: i32) -> WhereParam {
+            WhereParam::PointsGte(value)
+        }
+        pub fn not(value: i32) -> WhereParam {
+            WhereParam::PointsNot(value)
+        }
+        pub fn increment(value: i32) -> SetParam {
+            SetParam::IncrementPoints(value)
+        }
+        pub fn decrement(value: i32) -> SetParam {
+            SetParam::DecrementPoints(value)
+        }
+        pub fn multiply(value: i32) -> SetParam {
+            SetParam::MultiplyPoints(value)
+        }
+        pub fn divide(value: i32) -> SetParam {
+            SetParam::DividePoints(value)
+        }
+        pub struct Set(i32);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetPoints(value.0)
+            }
+        }
+    }
+    pub mod points_rate {
+        use super::super::*;
+        use super::_prisma::*;
+        use super::{Cursor, OrderByParam, SetParam, UniqueWhereParam, WhereParam, WithParam};
+        pub fn set<T: From<Set>>(value: i32) -> T {
+            Set(value).into()
+        }
+        pub fn equals(value: i32) -> WhereParam {
+            WhereParam::PointsRateEquals(value).into()
+        }
+        pub fn order(direction: Direction) -> OrderByParam {
+            OrderByParam::PointsRate(direction)
+        }
+        pub fn in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::PointsRateInVec(value)
+        }
+        pub fn not_in_vec(value: Vec<i32>) -> WhereParam {
+            WhereParam::PointsRateNotInVec(value)
+        }
+        pub fn lt(value: i32) -> WhereParam {
+            WhereParam::PointsRateLt(value)
+        }
+        pub fn lte(value: i32) -> WhereParam {
+            WhereParam::PointsRateLte(value)
+        }
+        pub fn gt(value: i32) -> WhereParam {
+            WhereParam::PointsRateGt(value)
+        }
+        pub fn gte(value: i32) -> WhereParam {
+            WhereParam::PointsRateGte(value)
+        }
+        pub fn not(value: i32) -> WhereParam {
+            WhereParam::PointsRateNot(value)
+        }
+        pub fn increment(value: i32) -> SetParam {
+            SetParam::IncrementPointsRate(value)
+        }
+        pub fn decrement(value: i32) -> SetParam {
+            SetParam::DecrementPointsRate(value)
+        }
+        pub fn multiply(value: i32) -> SetParam {
+            SetParam::MultiplyPointsRate(value)
+        }
+        pub fn divide(value: i32) -> SetParam {
+            SetParam::DividePointsRate(value)
+        }
+        pub struct Set(i32);
+        impl From<Set> for SetParam {
+            fn from(value: Set) -> Self {
+                Self::SetPointsRate(value.0)
+            }
+        }
+    }
+    pub fn _outputs() -> Vec<Selection> {
+        [
+            "id",
+            "ebookId",
+            "title",
+            "scrapedAt",
+            "thumbnailUrl",
+            "price",
+            "discount",
+            "discountRate",
+            "points",
+            "pointsRate",
+        ]
+        .into_iter()
+        .map(|o| {
+            let builder = Selection::builder(o);
+            builder.build()
+        })
+        .collect()
+    }
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub struct Data {
+        #[serde(rename = "id")]
+        pub id: String,
+        #[serde(rename = "ebook")]
+        pub ebook: Option<Box<super::ebook::Data>>,
+        #[serde(rename = "ebookId")]
+        pub ebook_id: String,
+        #[serde(rename = "title")]
+        pub title: String,
+        #[serde(rename = "scrapedAt")]
+        pub scraped_at: i32,
+        #[serde(rename = "thumbnailUrl")]
+        pub thumbnail_url: String,
+        #[serde(rename = "price")]
+        pub price: i32,
+        #[serde(rename = "discount")]
+        pub discount: i32,
+        #[serde(rename = "discountRate")]
+        pub discount_rate: i32,
+        #[serde(rename = "points")]
+        pub points: i32,
+        #[serde(rename = "pointsRate")]
+        pub points_rate: i32,
+    }
+    impl Data {
+        pub fn ebook(&self) -> Result<&super::ebook::Data, &'static str> {
+            self.ebook
+                .as_ref()
+                .ok_or("Attempted to access 'ebook' but did not fetch it using the .with() syntax")
+                .map(|v| v.as_ref())
+        }
+    }
+    #[derive(Clone)]
+    pub enum WithParam {
+        Ebook(super::ebook::UniqueArgs),
+    }
+    impl Into<Selection> for WithParam {
+        fn into(self) -> Selection {
+            match self {
+                Self::Ebook(args) => {
+                    let mut selections = super::ebook::_outputs();
+                    selections.extend(args.with_params.into_iter().map(Into::<Selection>::into));
+                    let mut builder = Selection::builder("ebook");
+                    builder.nested_selections(selections);
+                    builder.build()
+                }
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum SetParam {
+        SetId(String),
+        LinkEbook(super::ebook::UniqueWhereParam),
+        SetEbookId(String),
+        SetTitle(String),
+        SetScrapedAt(i32),
+        IncrementScrapedAt(i32),
+        DecrementScrapedAt(i32),
+        MultiplyScrapedAt(i32),
+        DivideScrapedAt(i32),
+        SetThumbnailUrl(String),
+        SetPrice(i32),
+        IncrementPrice(i32),
+        DecrementPrice(i32),
+        MultiplyPrice(i32),
+        DividePrice(i32),
+        SetDiscount(i32),
+        IncrementDiscount(i32),
+        DecrementDiscount(i32),
+        MultiplyDiscount(i32),
+        DivideDiscount(i32),
+        SetDiscountRate(i32),
+        IncrementDiscountRate(i32),
+        DecrementDiscountRate(i32),
+        MultiplyDiscountRate(i32),
+        DivideDiscountRate(i32),
+        SetPoints(i32),
+        IncrementPoints(i32),
+        DecrementPoints(i32),
+        MultiplyPoints(i32),
+        DividePoints(i32),
+        SetPointsRate(i32),
+        IncrementPointsRate(i32),
+        DecrementPointsRate(i32),
+        MultiplyPointsRate(i32),
+        DividePointsRate(i32),
+    }
+    impl Into<(String, PrismaValue)> for SetParam {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                SetParam::SetId(value) => ("id".to_string(), PrismaValue::String(value)),
+                SetParam::LinkEbook(where_param) => (
+                    "ebook".to_string(),
+                    PrismaValue::Object(vec![(
+                        "connect".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            vec![Into::<super::ebook::WhereParam>::into(where_param)].into_iter(),
+                        )),
+                    )]),
+                ),
+                SetParam::SetEbookId(value) => ("ebookId".to_string(), PrismaValue::String(value)),
+                SetParam::SetTitle(value) => ("title".to_string(), PrismaValue::String(value)),
+                SetParam::SetScrapedAt(value) => {
+                    ("scrapedAt".to_string(), PrismaValue::Int(value as i64))
+                }
+                SetParam::IncrementScrapedAt(value) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::Object(vec![(
+                        "increment".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DecrementScrapedAt(value) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::Object(vec![(
+                        "decrement".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::MultiplyScrapedAt(value) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::Object(vec![(
+                        "multiply".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DivideScrapedAt(value) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::Object(vec![(
+                        "divide".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::SetThumbnailUrl(value) => {
+                    ("thumbnailUrl".to_string(), PrismaValue::String(value))
+                }
+                SetParam::SetPrice(value) => ("price".to_string(), PrismaValue::Int(value as i64)),
+                SetParam::IncrementPrice(value) => (
+                    "price".to_string(),
+                    PrismaValue::Object(vec![(
+                        "increment".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DecrementPrice(value) => (
+                    "price".to_string(),
+                    PrismaValue::Object(vec![(
+                        "decrement".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::MultiplyPrice(value) => (
+                    "price".to_string(),
+                    PrismaValue::Object(vec![(
+                        "multiply".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DividePrice(value) => (
+                    "price".to_string(),
+                    PrismaValue::Object(vec![(
+                        "divide".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::SetDiscount(value) => {
+                    ("discount".to_string(), PrismaValue::Int(value as i64))
+                }
+                SetParam::IncrementDiscount(value) => (
+                    "discount".to_string(),
+                    PrismaValue::Object(vec![(
+                        "increment".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DecrementDiscount(value) => (
+                    "discount".to_string(),
+                    PrismaValue::Object(vec![(
+                        "decrement".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::MultiplyDiscount(value) => (
+                    "discount".to_string(),
+                    PrismaValue::Object(vec![(
+                        "multiply".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DivideDiscount(value) => (
+                    "discount".to_string(),
+                    PrismaValue::Object(vec![(
+                        "divide".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::SetDiscountRate(value) => {
+                    ("discountRate".to_string(), PrismaValue::Int(value as i64))
+                }
+                SetParam::IncrementDiscountRate(value) => (
+                    "discountRate".to_string(),
+                    PrismaValue::Object(vec![(
+                        "increment".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DecrementDiscountRate(value) => (
+                    "discountRate".to_string(),
+                    PrismaValue::Object(vec![(
+                        "decrement".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::MultiplyDiscountRate(value) => (
+                    "discountRate".to_string(),
+                    PrismaValue::Object(vec![(
+                        "multiply".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DivideDiscountRate(value) => (
+                    "discountRate".to_string(),
+                    PrismaValue::Object(vec![(
+                        "divide".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::SetPoints(value) => {
+                    ("points".to_string(), PrismaValue::Int(value as i64))
+                }
+                SetParam::IncrementPoints(value) => (
+                    "points".to_string(),
+                    PrismaValue::Object(vec![(
+                        "increment".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DecrementPoints(value) => (
+                    "points".to_string(),
+                    PrismaValue::Object(vec![(
+                        "decrement".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::MultiplyPoints(value) => (
+                    "points".to_string(),
+                    PrismaValue::Object(vec![(
+                        "multiply".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DividePoints(value) => (
+                    "points".to_string(),
+                    PrismaValue::Object(vec![(
+                        "divide".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::SetPointsRate(value) => {
+                    ("pointsRate".to_string(), PrismaValue::Int(value as i64))
+                }
+                SetParam::IncrementPointsRate(value) => (
+                    "pointsRate".to_string(),
+                    PrismaValue::Object(vec![(
+                        "increment".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DecrementPointsRate(value) => (
+                    "pointsRate".to_string(),
+                    PrismaValue::Object(vec![(
+                        "decrement".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::MultiplyPointsRate(value) => (
+                    "pointsRate".to_string(),
+                    PrismaValue::Object(vec![(
+                        "multiply".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                SetParam::DividePointsRate(value) => (
+                    "pointsRate".to_string(),
+                    PrismaValue::Object(vec![(
+                        "divide".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum OrderByParam {
+        Id(Direction),
+        EbookId(Direction),
+        Title(Direction),
+        ScrapedAt(Direction),
+        ThumbnailUrl(Direction),
+        Price(Direction),
+        Discount(Direction),
+        DiscountRate(Direction),
+        Points(Direction),
+        PointsRate(Direction),
+    }
+    impl Into<(String, PrismaValue)> for OrderByParam {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                Self::Id(direction) => {
+                    ("id".to_string(), PrismaValue::String(direction.to_string()))
+                }
+                Self::EbookId(direction) => (
+                    "ebookId".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::Title(direction) => (
+                    "title".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::ScrapedAt(direction) => (
+                    "scrapedAt".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::ThumbnailUrl(direction) => (
+                    "thumbnailUrl".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::Price(direction) => (
+                    "price".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::Discount(direction) => (
+                    "discount".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::DiscountRate(direction) => (
+                    "discountRate".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::Points(direction) => (
+                    "points".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+                Self::PointsRate(direction) => (
+                    "pointsRate".to_string(),
+                    PrismaValue::String(direction.to_string()),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum Cursor {
+        Id(String),
+    }
+    impl Into<(String, PrismaValue)> for Cursor {
+        fn into(self) -> (String, PrismaValue) {
+            match self {
+                Self::Id(cursor) => ("id".to_string(), PrismaValue::String(cursor)),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum WhereParam {
+        Not(Vec<WhereParam>),
+        Or(Vec<WhereParam>),
+        And(Vec<WhereParam>),
+        IdEquals(String),
+        IdInVec(Vec<String>),
+        IdNotInVec(Vec<String>),
+        IdLt(String),
+        IdLte(String),
+        IdGt(String),
+        IdGte(String),
+        IdContains(String),
+        IdStartsWith(String),
+        IdEndsWith(String),
+        IdMode(QueryMode),
+        IdNot(String),
+        EbookIs(Vec<super::ebook::WhereParam>),
+        EbookIsNot(Vec<super::ebook::WhereParam>),
+        EbookIdEquals(String),
+        EbookIdInVec(Vec<String>),
+        EbookIdNotInVec(Vec<String>),
+        EbookIdLt(String),
+        EbookIdLte(String),
+        EbookIdGt(String),
+        EbookIdGte(String),
+        EbookIdContains(String),
+        EbookIdStartsWith(String),
+        EbookIdEndsWith(String),
+        EbookIdMode(QueryMode),
+        EbookIdNot(String),
+        TitleEquals(String),
+        TitleInVec(Vec<String>),
+        TitleNotInVec(Vec<String>),
+        TitleLt(String),
+        TitleLte(String),
+        TitleGt(String),
+        TitleGte(String),
+        TitleContains(String),
+        TitleStartsWith(String),
+        TitleEndsWith(String),
+        TitleMode(QueryMode),
+        TitleNot(String),
+        ScrapedAtEquals(i32),
+        ScrapedAtInVec(Vec<i32>),
+        ScrapedAtNotInVec(Vec<i32>),
+        ScrapedAtLt(i32),
+        ScrapedAtLte(i32),
+        ScrapedAtGt(i32),
+        ScrapedAtGte(i32),
+        ScrapedAtNot(i32),
+        ThumbnailUrlEquals(String),
+        ThumbnailUrlInVec(Vec<String>),
+        ThumbnailUrlNotInVec(Vec<String>),
+        ThumbnailUrlLt(String),
+        ThumbnailUrlLte(String),
+        ThumbnailUrlGt(String),
+        ThumbnailUrlGte(String),
+        ThumbnailUrlContains(String),
+        ThumbnailUrlStartsWith(String),
+        ThumbnailUrlEndsWith(String),
+        ThumbnailUrlMode(QueryMode),
+        ThumbnailUrlNot(String),
+        PriceEquals(i32),
+        PriceInVec(Vec<i32>),
+        PriceNotInVec(Vec<i32>),
+        PriceLt(i32),
+        PriceLte(i32),
+        PriceGt(i32),
+        PriceGte(i32),
+        PriceNot(i32),
+        DiscountEquals(i32),
+        DiscountInVec(Vec<i32>),
+        DiscountNotInVec(Vec<i32>),
+        DiscountLt(i32),
+        DiscountLte(i32),
+        DiscountGt(i32),
+        DiscountGte(i32),
+        DiscountNot(i32),
+        DiscountRateEquals(i32),
+        DiscountRateInVec(Vec<i32>),
+        DiscountRateNotInVec(Vec<i32>),
+        DiscountRateLt(i32),
+        DiscountRateLte(i32),
+        DiscountRateGt(i32),
+        DiscountRateGte(i32),
+        DiscountRateNot(i32),
+        PointsEquals(i32),
+        PointsInVec(Vec<i32>),
+        PointsNotInVec(Vec<i32>),
+        PointsLt(i32),
+        PointsLte(i32),
+        PointsGt(i32),
+        PointsGte(i32),
+        PointsNot(i32),
+        PointsRateEquals(i32),
+        PointsRateInVec(Vec<i32>),
+        PointsRateNotInVec(Vec<i32>),
+        PointsRateLt(i32),
+        PointsRateLte(i32),
+        PointsRateGt(i32),
+        PointsRateGte(i32),
+        PointsRateNot(i32),
+    }
+    impl Into<SerializedWhere> for WhereParam {
+        fn into(self) -> SerializedWhere {
+            match self {
+                Self::Not(value) => (
+                    "NOT".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::Or(value) => (
+                    "OR".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::And(value) => (
+                    "AND".to_string(),
+                    SerializedWhereValue::List(
+                        value
+                            .into_iter()
+                            .map(|v| PrismaValue::Object(transform_equals(vec![v].into_iter())))
+                            .collect(),
+                    ),
+                ),
+                Self::IdEquals(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdInVec(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::IdNotInVec(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::IdLt(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdLte(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdGt(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdGte(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdContains(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdStartsWith(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdEndsWith(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::IdMode(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::IdNot(value) => (
+                    "id".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIs(value) => (
+                    "ebook".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "is".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookIsNot(value) => (
+                    "ebook".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "isNot".to_string(),
+                        PrismaValue::Object(transform_equals(
+                            value.into_iter().map(Into::<SerializedWhere>::into),
+                        )),
+                    )]),
+                ),
+                Self::EbookIdEquals(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdInVec(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::EbookIdNotInVec(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::EbookIdLt(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdLte(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdGt(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdGte(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdContains(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdStartsWith(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdEndsWith(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::EbookIdMode(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::EbookIdNot(value) => (
+                    "ebookId".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleEquals(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleInVec(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::TitleNotInVec(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::TitleLt(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleLte(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleGt(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleGte(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleContains(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleStartsWith(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleEndsWith(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::TitleMode(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::TitleNot(value) => (
+                    "title".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ScrapedAtEquals(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtInVec(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::ScrapedAtNotInVec(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::ScrapedAtLt(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtLte(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtGt(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtGte(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ScrapedAtNot(value) => (
+                    "scrapedAt".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::ThumbnailUrlEquals(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ThumbnailUrlInVec(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::ThumbnailUrlNotInVec(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value.into_iter().map(|v| PrismaValue::String(v)).collect(),
+                        ),
+                    )]),
+                ),
+                Self::ThumbnailUrlLt(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ThumbnailUrlLte(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ThumbnailUrlGt(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ThumbnailUrlGte(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ThumbnailUrlContains(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "contains".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ThumbnailUrlStartsWith(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "startsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ThumbnailUrlEndsWith(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "endsWith".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::ThumbnailUrlMode(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "mode".to_string(),
+                        PrismaValue::Enum(value.to_string()),
+                    )]),
+                ),
+                Self::ThumbnailUrlNot(value) => (
+                    "thumbnailUrl".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::String(value),
+                    )]),
+                ),
+                Self::PriceEquals(value) => (
+                    "price".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PriceInVec(value) => (
+                    "price".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::PriceNotInVec(value) => (
+                    "price".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::PriceLt(value) => (
+                    "price".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PriceLte(value) => (
+                    "price".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PriceGt(value) => (
+                    "price".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PriceGte(value) => (
+                    "price".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PriceNot(value) => (
+                    "price".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountEquals(value) => (
+                    "discount".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountInVec(value) => (
+                    "discount".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::DiscountNotInVec(value) => (
+                    "discount".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::DiscountLt(value) => (
+                    "discount".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountLte(value) => (
+                    "discount".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountGt(value) => (
+                    "discount".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountGte(value) => (
+                    "discount".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountNot(value) => (
+                    "discount".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountRateEquals(value) => (
+                    "discountRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountRateInVec(value) => (
+                    "discountRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::DiscountRateNotInVec(value) => (
+                    "discountRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::DiscountRateLt(value) => (
+                    "discountRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountRateLte(value) => (
+                    "discountRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountRateGt(value) => (
+                    "discountRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountRateGte(value) => (
+                    "discountRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::DiscountRateNot(value) => (
+                    "discountRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsEquals(value) => (
+                    "points".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsInVec(value) => (
+                    "points".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::PointsNotInVec(value) => (
+                    "points".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::PointsLt(value) => (
+                    "points".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsLte(value) => (
+                    "points".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsGt(value) => (
+                    "points".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsGte(value) => (
+                    "points".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsNot(value) => (
+                    "points".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsRateEquals(value) => (
+                    "pointsRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "equals".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsRateInVec(value) => (
+                    "pointsRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "in".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::PointsRateNotInVec(value) => (
+                    "pointsRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "notIn".to_string(),
+                        PrismaValue::List(
+                            value
+                                .into_iter()
+                                .map(|v| PrismaValue::Int(v as i64))
+                                .collect(),
+                        ),
+                    )]),
+                ),
+                Self::PointsRateLt(value) => (
+                    "pointsRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsRateLte(value) => (
+                    "pointsRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "lte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsRateGt(value) => (
+                    "pointsRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gt".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsRateGte(value) => (
+                    "pointsRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "gte".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+                Self::PointsRateNot(value) => (
+                    "pointsRate".to_string(),
+                    SerializedWhereValue::Object(vec![(
+                        "not".to_string(),
+                        PrismaValue::Int(value as i64),
+                    )]),
+                ),
+            }
+        }
+    }
+    #[derive(Clone)]
+    pub enum UniqueWhereParam {
+        IdEquals(String),
+    }
+    impl From<UniqueWhereParam> for WhereParam {
+        fn from(value: UniqueWhereParam) -> Self {
+            match value {
+                UniqueWhereParam::IdEquals(value) => Self::IdEquals(value),
+            }
+        }
+    }
+    impl From<Operator<Self>> for WhereParam {
+        fn from(op: Operator<Self>) -> Self {
+            match op {
+                Operator::Not(value) => Self::Not(value),
+                Operator::And(value) => Self::And(value),
+                Operator::Or(value) => Self::Or(value),
+            }
+        }
+    }
+    pub type UniqueArgs = prisma_client_rust::UniqueArgs<WithParam>;
+    pub type ManyArgs = prisma_client_rust::ManyArgs<WhereParam, WithParam, OrderByParam, Cursor>;
+    pub type Create<'a> = prisma_client_rust::Create<'a, SetParam, WithParam, Data>;
+    pub type FindUnique<'a> =
+        prisma_client_rust::FindUnique<'a, WhereParam, WithParam, SetParam, Data>;
+    pub type FindMany<'a> = prisma_client_rust::FindMany<
+        'a,
+        WhereParam,
+        WithParam,
+        OrderByParam,
+        Cursor,
+        SetParam,
+        Data,
+    >;
+    pub type FindFirst<'a> =
+        prisma_client_rust::FindFirst<'a, WhereParam, WithParam, OrderByParam, Cursor, Data>;
+    pub type Update<'a> = prisma_client_rust::Update<'a, WhereParam, WithParam, SetParam, Data>;
+    pub type UpdateMany<'a> = prisma_client_rust::UpdateMany<'a, WhereParam, SetParam>;
+    pub type Upsert<'a> = prisma_client_rust::Upsert<'a, WhereParam, SetParam, WithParam, Data>;
+    pub type Delete<'a> = prisma_client_rust::Delete<'a, WhereParam, WithParam, Data>;
+    pub type DeleteMany<'a> = prisma_client_rust::DeleteMany<'a, WhereParam>;
+    pub struct Actions<'a> {
+        pub client: &'a PrismaClient,
+    }
+    impl<'a> Actions<'a> {
+        pub fn create(
+            self,
+            ebook: ebook::Link,
+            title: title::Set,
+            scraped_at: scraped_at::Set,
+            thumbnail_url: thumbnail_url::Set,
+            price: price::Set,
+            discount: discount::Set,
+            discount_rate: discount_rate::Set,
+            points: points::Set,
+            points_rate: points_rate::Set,
+            mut _params: Vec<SetParam>,
+        ) -> Create<'a> {
+            _params.push(ebook.into());
+            _params.push(title.into());
+            _params.push(scraped_at.into());
+            _params.push(thumbnail_url.into());
+            _params.push(price.into());
+            _params.push(discount.into());
+            _params.push(discount_rate.into());
+            _params.push(points.into());
+            _params.push(points_rate.into());
+            Create::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookSnapshot", _outputs()),
+                _params,
+            )
+        }
+        pub fn find_unique(self, param: UniqueWhereParam) -> FindUnique<'a> {
+            FindUnique::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookSnapshot", _outputs()),
+                param.into(),
+            )
+        }
+        pub fn find_first(self, params: Vec<WhereParam>) -> FindFirst<'a> {
+            FindFirst::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookSnapshot", _outputs()),
+                params,
+            )
+        }
+        pub fn find_many(self, params: Vec<WhereParam>) -> FindMany<'a> {
+            FindMany::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookSnapshot", _outputs()),
+                params,
+            )
+        }
+        pub fn upsert(
+            self,
+            _where: UniqueWhereParam,
+            _create: (
+                ebook::Link,
+                title::Set,
+                scraped_at::Set,
+                thumbnail_url::Set,
+                price::Set,
+                discount::Set,
+                discount_rate::Set,
+                points::Set,
+                points_rate::Set,
+                Vec<SetParam>,
+            ),
+            _update: Vec<SetParam>,
+        ) -> Upsert<'a> {
+            let (
+                ebook,
+                title,
+                scraped_at,
+                thumbnail_url,
+                price,
+                discount,
+                discount_rate,
+                points,
+                points_rate,
+                mut _params,
+            ) = _create;
+            _params.push(ebook.into());
+            _params.push(title.into());
+            _params.push(scraped_at.into());
+            _params.push(thumbnail_url.into());
+            _params.push(price.into());
+            _params.push(discount.into());
+            _params.push(discount_rate.into());
+            _params.push(points.into());
+            _params.push(points_rate.into());
+            Upsert::new(
+                self.client._new_query_context(),
+                QueryInfo::new("EbookSnapshot", _outputs()),
+                _where.into(),
+                _params,
+                _update,
+            )
+        }
+    }
+}
 pub mod _prisma {
     use super::*;
     use prisma_client_rust::{
@@ -805,6 +5299,18 @@ pub mod _prisma {
         pub fn user(&self) -> user::Actions {
             user::Actions { client: &self }
         }
+        pub fn wish_list(&self) -> wish_list::Actions {
+            wish_list::Actions { client: &self }
+        }
+        pub fn ebook(&self) -> ebook::Actions {
+            ebook::Actions { client: &self }
+        }
+        pub fn ebook_in_wish_list(&self) -> ebook_in_wish_list::Actions {
+            ebook_in_wish_list::Actions { client: &self }
+        }
+        pub fn ebook_snapshot(&self) -> ebook_snapshot::Actions {
+            ebook_snapshot::Actions { client: &self }
+        }
     }
     #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
     pub enum UserScalarFieldEnum {
@@ -821,6 +5327,96 @@ pub mod _prisma {
                 Self::Id => "id".to_string(),
                 Self::DisplayName => "displayName".to_string(),
                 Self::Email => "email".to_string(),
+            }
+        }
+    }
+    #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+    pub enum WishListScalarFieldEnum {
+        #[serde(rename = "id")]
+        Id,
+        #[serde(rename = "url")]
+        Url,
+        #[serde(rename = "scrapedAt")]
+        ScrapedAt,
+        #[serde(rename = "title")]
+        Title,
+    }
+    impl ToString for WishListScalarFieldEnum {
+        fn to_string(&self) -> String {
+            match self {
+                Self::Id => "id".to_string(),
+                Self::Url => "url".to_string(),
+                Self::ScrapedAt => "scrapedAt".to_string(),
+                Self::Title => "title".to_string(),
+            }
+        }
+    }
+    #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+    pub enum EbookScalarFieldEnum {
+        #[serde(rename = "id")]
+        Id,
+        #[serde(rename = "url")]
+        Url,
+    }
+    impl ToString for EbookScalarFieldEnum {
+        fn to_string(&self) -> String {
+            match self {
+                Self::Id => "id".to_string(),
+                Self::Url => "url".to_string(),
+            }
+        }
+    }
+    #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+    pub enum EbookInWishListScalarFieldEnum {
+        #[serde(rename = "wishListId")]
+        WishListId,
+        #[serde(rename = "ebookId")]
+        EbookId,
+    }
+    impl ToString for EbookInWishListScalarFieldEnum {
+        fn to_string(&self) -> String {
+            match self {
+                Self::WishListId => "wishListId".to_string(),
+                Self::EbookId => "ebookId".to_string(),
+            }
+        }
+    }
+    #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+    pub enum EbookSnapshotScalarFieldEnum {
+        #[serde(rename = "id")]
+        Id,
+        #[serde(rename = "ebookId")]
+        EbookId,
+        #[serde(rename = "title")]
+        Title,
+        #[serde(rename = "scrapedAt")]
+        ScrapedAt,
+        #[serde(rename = "thumbnailUrl")]
+        ThumbnailUrl,
+        #[serde(rename = "price")]
+        Price,
+        #[serde(rename = "discount")]
+        Discount,
+        #[serde(rename = "discountRate")]
+        DiscountRate,
+        #[serde(rename = "points")]
+        Points,
+        #[serde(rename = "pointsRate")]
+        PointsRate,
+    }
+    impl ToString for EbookSnapshotScalarFieldEnum {
+        fn to_string(&self) -> String {
+            match self {
+                Self::Id => "id".to_string(),
+                Self::EbookId => "ebookId".to_string(),
+                Self::Title => "title".to_string(),
+                Self::ScrapedAt => "scrapedAt".to_string(),
+                Self::ThumbnailUrl => "thumbnailUrl".to_string(),
+                Self::Price => "price".to_string(),
+                Self::Discount => "discount".to_string(),
+                Self::DiscountRate => "discountRate".to_string(),
+                Self::Points => "points".to_string(),
+                Self::PointsRate => "pointsRate".to_string(),
             }
         }
     }

@@ -4,11 +4,12 @@ use prisma::user;
 
 #[tokio::main]
 async fn main() {
-    let client= prisma::new_client().await?;
+    let client= prisma::new_client().await.unwrap();
 
     let users = client.user()
         .find_many(vec![user::display_name::equals("homura".to_string())])
-        .exec().await?;
+        .exec().await.unwrap();
+
 }
 
 #[cfg(test)]

@@ -6,3 +6,5 @@ members = [
     "prisma-cli",
     "scrape-wish-list",
 ]
+
+resolver = "2"

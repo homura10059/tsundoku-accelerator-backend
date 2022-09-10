@@ -1588,6 +1588,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "adab1eaa3408fb7f0c777a73e7465fd5656136fc93b670eb6df3c88c2c1344e3"
 
 [[package]]
+name = "infrastructures"
+version = "0.1.0"
+dependencies = [
+ "prisma-client-rust",
+ "prisma-client-rust-cli",
+ "serde",
+ "tokio",
+]
+
+[[package]]
 name = "instant"
 version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3331,15 +3341,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3acd125665422973a33ac9d3dd2df85edad0f4ae9b00dafb1a05e43a9f5ef8e7"
 dependencies = [
  "winapi",
-]
-
-[[package]]
-name = "repositories"
-version = "0.1.0"
-dependencies = [
- "prisma-client-rust",
- "prisma-client-rust-cli",
- "tokio",
 ]
 
 [[package]]

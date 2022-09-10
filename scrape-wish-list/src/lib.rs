@@ -1,11 +1,10 @@
+use anyhow::Result;
+use headless_chrome::{Browser, LaunchOptions};
 use std::path::PathBuf;
 use std::time::Duration;
-use headless_chrome::{Browser, LaunchOptions};
-use anyhow::Result;
 use url::Url;
 
-
-#[derive(Debug,PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct WishListSnapshot {
     id: String,
     title: String,
@@ -13,21 +12,20 @@ pub struct WishListSnapshot {
     items: Vec<Url>,
 }
 
-
-fn create_item_url(href: String) -> Result<Url>{
+fn create_item_url(href: String) -> Result<Url> {
     let url = Url::parse("https://www.amazon.co.jp")?;
     let mut joined = url.join(href.as_str())?;
     joined.set_query(None);
     Ok(joined)
 }
 
-fn create_wish_list_url(id: &str) -> Result<Url>{
+fn create_wish_list_url(id: &str) -> Result<Url> {
     let url = Url::parse("https://www.amazon.jp/hz/wishlist/ls/")?;
     let joined = url.join(id)?;
     Ok(joined)
 }
 
-pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot>{
+pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot> {
     let url = create_wish_list_url(id)?;
     // let browser = Browser::default()?;
     let mut path = PathBuf::new();
@@ -60,7 +58,8 @@ pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot>{
 
     let links = tab.find_elements(".a-link-normal")?;
     println!("{:?}", links);
-    let mut items: Vec<_>= links.iter()
+    let mut items: Vec<_> = links
+        .iter()
         .filter_map(|link| link.get_attributes().ok())
         .filter_map(|x| x)
         .flatten()
@@ -74,7 +73,7 @@ pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot>{
         id: id.to_string(),
         url,
         title: String::from(""),
-        items
+        items,
     };
 
     Ok(snapshot)
@@ -99,7 +98,7 @@ mod tests {
             id: String::from("2BDAPI9RQ09E9"),
             url: Url::parse("https://www.amazon.jp/hz/wishlist/ls/2BDAPI9RQ09E9").unwrap(),
             title: String::from(""),
-            items
+            items,
         };
         assert_eq!(
             get_wish_list_snapshot(expected.id.as_str()).unwrap(),

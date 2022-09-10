@@ -2,7 +2,7 @@
 
 members = [
     "domains",
-    "repositories",
+    "infrastructures",
     "prisma-cli",
     "scrape-wish-list",
 ]

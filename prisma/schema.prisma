@@ -1,6 +1,6 @@
 generator client {
   provider = "cargo prisma"
-  output   = "../infrastructures/src/prisma.rs"
+  output   = "../infrastructures/src/db/prisma.rs"
 }
 
 datasource db {
@@ -17,7 +17,7 @@ model User {
 model WishList {
   id              String            @id
   url             String            @unique
-  scrapedAt       Int
+  scrapedAt       BigInt
   title           String
   EbookInWishList EbookInWishList[]
 }
@@ -30,7 +30,7 @@ model Ebook {
 }
 
 model EbookInWishList {
-  wishList   WishList @relation(fields: [wishListId], references: [id])
+  wish_list   WishList @relation(fields: [wishListId], references: [id])
   wishListId String
   ebook      Ebook    @relation(fields: [ebookId], references: [id])
   ebookId    String

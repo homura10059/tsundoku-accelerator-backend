@@ -8,5 +8,6 @@ edition = "2021"
 [dependencies]
 tokio = { version = "1.20.1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
-prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.0" }
-prisma-client-rust-cli = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.0" }
+prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.1" }
+prisma-client-rust-cli = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.1" }
+url = "2.2.2"

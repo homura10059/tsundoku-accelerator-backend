@@ -5,6 +5,7 @@ members = [
     "infrastructures",
     "prisma-cli",
     "scrape-wish-list",
+    "pure-funcs"
 ]
 
 resolver = "2"

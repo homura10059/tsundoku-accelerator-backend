@@ -1,7 +1,5 @@
 use anyhow::Result;
 use headless_chrome::{Browser, LaunchOptions};
-use std::path::PathBuf;
-use std::time::Duration;
 use url::Url;
 
 #[derive(Debug, PartialEq)]
@@ -27,24 +25,7 @@ fn create_wish_list_url(id: &str) -> Result<Url> {
 
 pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot> {
     let url = create_wish_list_url(id)?;
-    // let browser = Browser::default()?;
-    let mut path = PathBuf::new();
-    path.push("bin/chromium");
-    let browser = Browser::new(LaunchOptions {
-        headless: true,
-        sandbox: true,
-        idle_browser_timeout: Duration::from_secs(30),
-        window_size: None,
-        path: Some(path),
-        user_data_dir: None,
-        port: None,
-        ignore_certificate_errors: true,
-        extensions: Vec::new(),
-        process_envs: None,
-        fetcher_options: Default::default(),
-        args: Vec::new(),
-        disable_default_args: false,
-    })?;
+    let browser = Browser::default()?;
 
     let tab = browser.wait_for_initial_tab()?;
     tab.navigate_to(url.as_str())?;

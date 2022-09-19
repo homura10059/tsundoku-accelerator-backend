@@ -1,25 +1,10 @@
 pub mod prisma;
 
 use crate::db::prisma::ebook::Data;
+use crate::models::{ItemMetaData, WishListSnapshot};
 use anyhow::Result;
 use prisma::PrismaClient;
 use prisma::{ebook, ebook_in_wish_list, wish_list};
-use url::Url;
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct ItemMetaData {
-    id: String,
-    url: Url,
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct WishListSnapshot {
-    id: String,
-    title: String,
-    url: Url,
-    scraped_at: i64,
-    items: Vec<ItemMetaData>,
-}
 
 async fn upsert_items(client: &PrismaClient, items: &Vec<ItemMetaData>) -> Result<Vec<Data>> {
     let upsert_target = items.to_vec();
@@ -85,6 +70,7 @@ mod tests {
     use super::*;
     use dotenv;
     use pure_funcs::get_now_in_sec;
+    use url::Url;
 
     async fn client_helper() -> PrismaClient {
         let client = match prisma::new_client().await {

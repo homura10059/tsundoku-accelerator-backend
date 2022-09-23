@@ -1,2 +1,2 @@
-mod db;
-mod scraper;
+pub mod db;
+pub mod scraper;

@@ -1,10 +1,21 @@
 pub mod prisma;
+pub mod wish_list;
 
 use crate::infrastructures::db::prisma::ebook::Data;
 use crate::models::{ItemMetaData, WishListSnapshot};
 use anyhow::Result;
 use prisma::PrismaClient;
-use prisma::{ebook, ebook_in_wish_list, wish_list};
+use prisma::{ebook, ebook_in_wish_list, wish_list as wish_list_data};
+
+pub async fn get_client() -> PrismaClient {
+    let client = match prisma::new_client().await {
+        Ok(c) => c,
+        Err(error) => {
+            panic!("Failed to open prisma client : {:?}", error)
+        }
+    };
+    client
+}
 
 async fn upsert_items(client: &PrismaClient, items: &Vec<ItemMetaData>) -> Result<Vec<Data>> {
     let upsert_target = items.to_vec();
@@ -22,14 +33,14 @@ async fn upsert_items(client: &PrismaClient, items: &Vec<ItemMetaData>) -> Resul
     Ok(items)
 }
 
-async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot) -> Result<()> {
+pub async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot) -> Result<()> {
     let items = upsert_items(client, &snapshot.items).await?;
 
     let wish_list = client
         .wish_list()
         .upsert(
-            wish_list::id::equals(snapshot.id.clone()),
-            wish_list::create(
+            wish_list_data::id::equals(snapshot.id.clone()),
+            wish_list_data::create(
                 snapshot.id.clone(),
                 snapshot.url.clone().to_string(),
                 snapshot.scraped_at.clone(),
@@ -37,8 +48,8 @@ async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot) ->
                 vec![],
             ),
             vec![
-                wish_list::SetParam::SetScrapedAt(snapshot.scraped_at.clone()),
-                wish_list::SetParam::SetTitle(snapshot.title.clone()),
+                wish_list_data::SetParam::SetScrapedAt(snapshot.scraped_at.clone()),
+                wish_list_data::SetParam::SetTitle(snapshot.title.clone()),
             ],
         )
         .exec()
@@ -72,16 +83,6 @@ mod tests {
     use pure_funcs::get_now_in_sec;
     use url::Url;
 
-    async fn client_helper() -> PrismaClient {
-        let client = match prisma::new_client().await {
-            Ok(c) => c,
-            Err(error) => {
-                panic!("Failed to open prisma client : {:?}", error)
-            }
-        };
-        client
-    }
-
     fn items_helper() -> Vec<ItemMetaData> {
         let items = vec![
             ItemMetaData {
@@ -100,7 +101,7 @@ mod tests {
     async fn test_upsert_items() {
         dotenv::dotenv().ok();
 
-        let client = client_helper().await;
+        let client = get_client().await;
         let items = items_helper();
 
         let actual = upsert_items(&client, &items.to_vec()).await.unwrap();
@@ -111,7 +112,7 @@ mod tests {
     async fn test_upsert_wish_list() {
         dotenv::dotenv().ok();
 
-        let client = client_helper().await;
+        let client = get_client().await;
         let items = items_helper();
         let expected = WishListSnapshot {
             id: String::from("2BDAPI9RQ09E9"),

@@ -1,6 +1,6 @@
 pub mod prisma;
 
-use crate::db::prisma::ebook::Data;
+use crate::infrastructures::db::prisma::ebook::Data;
 use crate::models::{ItemMetaData, WishListSnapshot};
 use anyhow::Result;
 use prisma::PrismaClient;

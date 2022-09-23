@@ -2,7 +2,6 @@
 
 members = [
     "domains",
-    "infrastructures",
     "prisma-cli",
     "pure-funcs"
 ]

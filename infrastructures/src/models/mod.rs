@@ -1,12 +1,12 @@
 use url::Url;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]
 pub struct ItemMetaData {
     pub id: String,
     pub url: Url,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]
 pub struct WishListSnapshot {
     pub id: String,
     pub title: String,

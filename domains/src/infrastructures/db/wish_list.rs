@@ -1,11 +1,13 @@
-use crate::infrastructures::db::prisma::ebook::Data;
+use crate::infrastructures::db::prisma::ebook::Data as EbookData;
+use crate::infrastructures::db::prisma::wish_list::Data as WishListData;
 use crate::infrastructures::db::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
 use crate::models::{ItemMetaData, WishListSnapshot};
+use anyhow::Result;
 
 pub async fn upsert_items(
     client: &PrismaClient,
     items: &Vec<ItemMetaData>,
-) -> anyhow::Result<Vec<Data>> {
+) -> Result<Vec<EbookData>> {
     let upsert_target = items.to_vec();
     let item_upsert: Vec<_> = upsert_target
         .into_iter()
@@ -21,10 +23,7 @@ pub async fn upsert_items(
     Ok(items)
 }
 
-pub async fn upsert_wish_list(
-    client: &PrismaClient,
-    snapshot: &WishListSnapshot,
-) -> anyhow::Result<()> {
+pub async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot) -> Result<()> {
     let items = upsert_items(client, &snapshot.items).await?;
 
     let wish_list = client
@@ -65,6 +64,11 @@ pub async fn upsert_wish_list(
         .await?;
 
     Ok(())
+}
+
+pub async fn select_all_wish_list(client: &PrismaClient) -> Result<Vec<WishListData>> {
+    let wish_lists = client.wish_list().find_many(vec![]).exec().await?;
+    Ok(wish_lists)
 }
 
 #[cfg(test)]
@@ -116,5 +120,15 @@ mod tests {
 
         let actual = upsert_wish_list(&client, &expected).await.unwrap();
         assert_eq!(actual, ())
+    }
+
+    #[tokio::test]
+    async fn test_select_all_wish_list() {
+        dotenv::dotenv().ok();
+
+        let client = get_client().await;
+        let actual = select_all_wish_list(&client).await.unwrap();
+
+        assert!(actual.len() > 0)
     }
 }

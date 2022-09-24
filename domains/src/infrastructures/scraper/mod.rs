@@ -6,7 +6,6 @@ use crate::models::WishListSnapshot;
 use anyhow::Result;
 use headless_chrome::Browser;
 use pure_funcs::get_now_in_sec;
-use url::Url;
 
 pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot> {
     let url = wish_list::create_url(id)?;
@@ -52,6 +51,7 @@ pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use url::Url;
 
     fn get_items_mock() -> Vec<ItemMetaData> {
         let mut items = vec![

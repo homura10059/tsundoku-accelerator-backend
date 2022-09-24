@@ -1,11 +1,12 @@
 use crate::infrastructures::db::prisma::PrismaClient;
+use crate::infrastructures::db::wish_list;
 use crate::infrastructures::{db, scraper};
 use anyhow::Result;
 use futures::future;
 
 pub async fn update_wish_list(client: &PrismaClient, id: &str) -> Result<()> {
     let snapshot = scraper::get_wish_list_snapshot(id)?;
-    let result = db::upsert_wish_list(client, &snapshot).await?;
+    let result = wish_list::upsert_wish_list(client, &snapshot).await?;
     Ok(result)
 }
 

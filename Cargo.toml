@@ -3,7 +3,8 @@
 members = [
     "domains",
     "prisma-cli",
-    "pure-funcs"
+    "pure-funcs",
+    "backend-cli",
 ]
 
 resolver = "2"

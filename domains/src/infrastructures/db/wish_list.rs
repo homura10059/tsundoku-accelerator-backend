@@ -97,7 +97,7 @@ mod tests {
     async fn test_upsert_items() {
         dotenv::dotenv().ok();
 
-        let client = get_client().await;
+        let client = get_client().await.unwrap();
         let items = items_helper();
 
         let actual = upsert_items(&client, &items.to_vec()).await.unwrap();
@@ -108,7 +108,7 @@ mod tests {
     async fn test_upsert_wish_list() {
         dotenv::dotenv().ok();
 
-        let client = get_client().await;
+        let client = get_client().await.unwrap();
         let items = items_helper();
         let expected = WishListSnapshot {
             id: String::from("2BDAPI9RQ09E9"),
@@ -126,7 +126,7 @@ mod tests {
     async fn test_select_all_wish_list() {
         dotenv::dotenv().ok();
 
-        let client = get_client().await;
+        let client = get_client().await.unwrap();
         let actual = select_all_wish_list(&client).await.unwrap();
 
         assert!(actual.len() > 0)

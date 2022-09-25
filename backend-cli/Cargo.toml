@@ -1,0 +1,9 @@
+[package]
+name = "backend-cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dotenv = "0.15.0"
+domains = { path = "../domains" }
+tokio = { version = "1.20.1", features = ["full"] }

@@ -10,7 +10,7 @@ pub async fn update_wish_list(client: &PrismaClient, id: String) -> Result<()> {
 }
 
 pub async fn update_all_wish_list() -> Result<()> {
-    let client = db::get_client().await;
+    let client = db::get_client().await?;
     let lists = db::wish_list::select_all_wish_list(&client).await?;
 
     let results = lists
@@ -29,7 +29,7 @@ mod tests {
     #[tokio::test]
     async fn it_works_update_wish_list() {
         dotenv::dotenv().ok();
-        let client = db::get_client().await;
+        let client = db::get_client().await.unwrap();
 
         let actual = update_wish_list(&client, String::from("2BDAPI9RQ09E9"))
             .await

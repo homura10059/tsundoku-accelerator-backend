@@ -4,14 +4,9 @@ pub mod wish_list;
 use anyhow::Result;
 use prisma::PrismaClient;
 
-pub async fn get_client() -> PrismaClient {
-    let client = match prisma::new_client().await {
-        Ok(c) => c,
-        Err(error) => {
-            panic!("Failed to open prisma client : {:?}", error)
-        }
-    };
-    client
+pub async fn get_client() -> Result<PrismaClient> {
+    let client = prisma::new_client().await?;
+    Ok(client)
 }
 
 #[cfg(test)]

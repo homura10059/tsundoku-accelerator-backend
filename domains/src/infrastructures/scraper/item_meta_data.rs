@@ -9,7 +9,7 @@ fn create_item_url(href: String) -> Result<Url> {
     Ok(joined)
 }
 
-pub fn create(href: String, price: String) -> Result<ItemMetaData> {
+pub fn create(href: String, title: String, price: String) -> Result<ItemMetaData> {
     let url = create_item_url(href)?;
     let path = url.path().to_string();
     let a: Vec<_> = path.split("/").collect();
@@ -17,6 +17,7 @@ pub fn create(href: String, price: String) -> Result<ItemMetaData> {
     let meta = ItemMetaData {
         id: id.to_string(),
         url,
+        title,
         price,
     };
     Ok(meta)
@@ -39,11 +40,13 @@ mod tests {
         let expected = ItemMetaData {
             id: String::from("2BDAPI9RQ09E9"),
             url: Url::parse("https://www.amazon.co.jp/dp/2BDAPI9RQ09E9/").unwrap(),
+            title: String::from("title"),
             price: String::from("100"),
         };
         assert_eq!(
             create(
                 "/dp/2BDAPI9RQ09E9/?coliid=IH".to_string(),
+                String::from("title"),
                 String::from("100")
             )
             .unwrap(),

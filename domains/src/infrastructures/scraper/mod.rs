@@ -22,11 +22,12 @@ fn get_item(elm: &Element) -> Result<ItemMetaData> {
     let a_tag = elm.find_element(".a-link-normal")?;
     let a_tag_attributes = a_tag.get_attributes()?.unwrap();
     let href = search_from(&a_tag_attributes, "href").unwrap();
+    let title = search_from(&a_tag_attributes, "title").unwrap();
 
     let attributes = elm.get_attributes()?.unwrap();
     let price = search_from(&attributes, "data-price").unwrap();
 
-    let meta = item_meta_data::create(href, price)?;
+    let meta = item_meta_data::create(href, title, price)?;
     Ok(meta)
 }
 
@@ -74,62 +75,14 @@ pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot> {
 mod tests {
     use super::*;
 
-    fn get_items_mock() -> Vec<ItemMetaData> {
-        let mut items = vec![
-            ItemMetaData {
-                id: String::from("B08S7CJV4X"),
-                url: Url::parse("https://www.amazon.co.jp/dp/B08S7CJV4X/").unwrap(),
-                price: String::from("1188.0"),
-            },
-            ItemMetaData {
-                id: String::from("B08L53NT5P"),
-                url: Url::parse("https://www.amazon.co.jp/dp/B08L53NT5P/").unwrap(),
-                price: String::from("2250.0"),
-            },
-            ItemMetaData {
-                id: String::from("B08L54335M"),
-                url: Url::parse("https://www.amazon.co.jp/dp/B08L54335M/").unwrap(),
-                price: String::from("3375.0"),
-            },
-            ItemMetaData {
-                id: String::from("B08L51YSLR"),
-                url: Url::parse("https://www.amazon.co.jp/dp/B08L51YSLR/").unwrap(),
-                price: String::from("2751.0"),
-            },
-            ItemMetaData {
-                id: String::from("B08L5278XF"),
-                url: Url::parse("https://www.amazon.co.jp/dp/B08L5278XF/").unwrap(),
-                price: String::from("2751.0"),
-            },
-            ItemMetaData {
-                id: String::from("B09TPLQGKS"),
-                url: Url::parse("https://www.amazon.co.jp/dp/B09TPLQGKS/").unwrap(),
-                price: String::from("396.0"),
-            },
-            ItemMetaData {
-                id: String::from("B0B5Q2RMX6"),
-                url: Url::parse("https://www.amazon.co.jp/dp/B0B5Q2RMX6/").unwrap(),
-                price: String::from("3168.0"),
-            },
-        ];
-        items.sort();
-        items
-    }
-
     #[test]
     fn test_get_item_urls() {
-        let items = get_items_mock();
-        let expected = WishListSnapshot {
-            id: String::from("2BDAPI9RQ09E9"),
-            url: Url::parse("https://www.amazon.jp/hz/wishlist/ls/2BDAPI9RQ09E9").unwrap(),
-            title: String::from("do_not_delete"),
-            scraped_at: 0,
-            items,
-        };
-        let actual = get_wish_list_snapshot(expected.id.as_str()).unwrap();
-        assert_eq!(actual.id, expected.id);
-        assert_eq!(actual.url, expected.url);
-        assert_eq!(actual.title, expected.title);
-        assert_eq!(actual.items, expected.items);
+        let id = String::from("2BDAPI9RQ09E9");
+        let url = Url::parse("https://www.amazon.jp/hz/wishlist/ls/2BDAPI9RQ09E9").unwrap();
+        let actual = get_wish_list_snapshot(id.as_str()).unwrap();
+        assert_eq!(actual.id, id);
+        assert_eq!(actual.url, url);
+        assert_eq!(actual.title, String::from("do_not_delete"));
+        insta::assert_debug_snapshot!(actual.items);
     }
 }

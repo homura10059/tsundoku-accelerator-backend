@@ -4,6 +4,7 @@ use url::Url;
 pub struct ItemMetaData {
     pub id: String,
     pub url: Url,
+    pub title: String,
     pub price: String,
 }
 

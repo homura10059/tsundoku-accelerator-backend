@@ -84,10 +84,12 @@ mod tests {
             ItemMetaData {
                 id: String::from("B09RQGMYKZ"),
                 url: Url::parse("https://www.amazon.co.jp/dp/B09RQGMYKZ").unwrap(),
+                price: String::from("100"),
             },
             ItemMetaData {
                 id: String::from("B09WQT2DQD"),
                 url: Url::parse("https://www.amazon.co.jp/dp/B09WQT2DQD").unwrap(),
+                price: String::from("100"),
             },
         ];
         items

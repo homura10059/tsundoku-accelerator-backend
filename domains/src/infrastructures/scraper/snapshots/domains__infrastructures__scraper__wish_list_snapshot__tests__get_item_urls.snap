@@ -1,5 +1,5 @@
 ---
-source: domains/src/infrastructures/scraper/mod.rs
+source: domains/src/infrastructures/scraper/wish_list_snapshot.rs
 expression: actual.items
 ---
 [

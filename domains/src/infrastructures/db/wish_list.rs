@@ -45,6 +45,7 @@ pub async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot
                 vec![],
             ),
             vec![
+                wish_list::SetParam::SetUrl(snapshot.url.to_string().clone()),
                 wish_list::SetParam::SetScrapedAt(snapshot.scraped_at.clone()),
                 wish_list::SetParam::SetTitle(snapshot.title.clone()),
             ],

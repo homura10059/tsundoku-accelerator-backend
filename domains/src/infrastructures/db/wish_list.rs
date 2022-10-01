@@ -12,9 +12,16 @@ pub async fn upsert_items(
     let item_upsert: Vec<_> = upsert_target
         .into_iter()
         .map(|item| {
+            let price = item.price.parse::<f64>().unwrap();
             client.ebook().upsert(
                 ebook::id::equals(item.id.clone()),
-                ebook::create(item.id.clone(), item.url.to_string(), vec![]),
+                ebook::create(
+                    item.id.clone(),
+                    item.url.to_string(),
+                    item.title,
+                    price,
+                    vec![],
+                ),
                 vec![],
             )
         })
@@ -85,13 +92,13 @@ mod tests {
                 id: String::from("B09RQGMYKZ"),
                 url: Url::parse("https://www.amazon.co.jp/dp/B09RQGMYKZ").unwrap(),
                 title: String::from("title"),
-                price: String::from("100"),
+                price: String::from("100.0"),
             },
             ItemMetaData {
                 id: String::from("B09WQT2DQD"),
                 url: Url::parse("https://www.amazon.co.jp/dp/B09WQT2DQD").unwrap(),
                 title: String::from("title"),
-                price: String::from("100"),
+                price: String::from("100.0"),
             },
         ];
         items

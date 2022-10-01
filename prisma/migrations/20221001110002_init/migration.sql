@@ -1,8 +1,17 @@
 -- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "displayName" TEXT NOT NULL,
+    "email" TEXT,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "WishList" (
     "id" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    "scrapedAt" INTEGER NOT NULL,
+    "scrapedAt" BIGINT NOT NULL,
     "title" TEXT NOT NULL,
 
     CONSTRAINT "WishList_pkey" PRIMARY KEY ("id")
@@ -12,6 +21,8 @@ CREATE TABLE "WishList" (
 CREATE TABLE "Ebook" (
     "id" TEXT NOT NULL,
     "url" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "price" INTEGER NOT NULL,
 
     CONSTRAINT "Ebook_pkey" PRIMARY KEY ("id")
 );

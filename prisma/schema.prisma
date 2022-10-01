@@ -25,6 +25,8 @@ model WishList {
 model Ebook {
   id              String            @id
   url             String            @unique
+  title           String
+  price           Float
   snapshots       EbookSnapshot[]
   EbookInWishList EbookInWishList[]
 }
@@ -43,11 +45,11 @@ model EbookSnapshot {
   ebook        Ebook  @relation(fields: [ebookId], references: [id])
   ebookId      String
   title        String
-  scrapedAt    Int
+  scrapedAt    BigInt
   thumbnailUrl String
-  price        Int
-  discount     Int
-  discountRate Int
-  points       Int
-  pointsRate   Int
+  price        Float
+  discount     Float
+  discountRate Float
+  points       Float
+  pointsRate   Float
 }

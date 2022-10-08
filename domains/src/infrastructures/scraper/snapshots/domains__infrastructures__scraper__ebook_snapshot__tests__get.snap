@@ -1,0 +1,10 @@
+---
+source: domains/src/infrastructures/scraper/ebook_snapshot.rs
+expression: actual.payment_ebook
+---
+Some(
+    Payment {
+        price: "3,344",
+        points: "152",
+    },
+)

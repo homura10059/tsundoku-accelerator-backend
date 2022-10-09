@@ -52,9 +52,6 @@ pub fn get(id: &str) -> Result<EbookSnapshot> {
     tab.navigate_to(url.as_str())?;
     tab.wait_for_element("#navFooter")?;
 
-    let title_element = tab.find_element("#productTitle")?;
-    let title = title_element.get_inner_text()?;
-
     let image = tab.find_element("#ebooksImgBlkFront")?;
     let image_attribute = image.get_attributes()?.unwrap();
     let thumbnail_url_str = scraper::search_from(&image_attribute, "src").unwrap();
@@ -73,7 +70,6 @@ pub fn get(id: &str) -> Result<EbookSnapshot> {
     let snapshot = EbookSnapshot {
         ebook_id: id.to_string(),
         scraped_at: get_now_in_sec(),
-        title: String::from(title.trim()),
         thumbnail_url,
         payment_ebook: payments.get(0).map(|x| x.clone()),
         payment_real: payments.get(1).map(|x| x.clone()),
@@ -92,7 +88,6 @@ mod tests {
         let id = String::from("B09RQGMYKZ");
         let actual = get(id.as_str()).unwrap();
         assert_eq!(actual.ebook_id, id);
-        assert_eq!(actual.title, String::from("コンセプトから理解するRust"));
         assert_eq!(
             actual.thumbnail_url.to_string(),
             String::from("https://m.media-amazon.com/images/I/51CTnaTcJtL.jpg")

@@ -44,12 +44,11 @@ model EbookSnapshot {
   id           String @id @default(cuid())
   ebook        Ebook  @relation(fields: [ebookId], references: [id])
   ebookId      String
-  title        String
   scrapedAt    BigInt
   thumbnailUrl String
   price        Float
-  discount     Float
-  discountRate Float
+  discount     Float?
+  discountRate Float?
   points       Float
   pointsRate   Float
 }

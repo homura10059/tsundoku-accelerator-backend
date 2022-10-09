@@ -26,7 +26,6 @@ pub struct Payment {
 #[derive(Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]
 pub struct EbookSnapshot {
     pub ebook_id: String,
-    pub title: String,
     pub scraped_at: i64,
     pub thumbnail_url: Url,
     pub payment_ebook: Option<Payment>,

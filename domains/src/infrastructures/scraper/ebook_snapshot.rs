@@ -39,16 +39,15 @@ fn extract_payment(text: &str) -> Option<Payment> {
     let price = *extract_price(text).iter().next()?;
     let points = *extract_points(text).iter().next()?;
     Some(Payment {
-        price: price.to_string(),
-        points: points.to_string(),
+        price: price.to_string().trim().replace(',', ""),
+        points: points.to_string().trim().replace(',', ""),
     })
 }
 
-pub fn get(id: &str) -> Result<EbookSnapshot> {
+pub fn get(browser: &Browser, id: &str) -> Result<EbookSnapshot> {
     let url = create_url(id)?;
-    let browser = Browser::default()?;
 
-    let tab = browser.wait_for_initial_tab()?;
+    let tab = browser.new_tab()?;
     tab.navigate_to(url.as_str())?;
     tab.wait_for_element("#navFooter")?;
 
@@ -75,6 +74,8 @@ pub fn get(id: &str) -> Result<EbookSnapshot> {
         payment_real: payments.get(1).map(|x| x.clone()),
     };
 
+    tab.close(true)?;
+
     Ok(snapshot)
 }
 
@@ -85,13 +86,10 @@ mod tests {
 
     #[test]
     fn test_get() {
+        let browser = Browser::default().unwrap();
         let id = String::from("B09RQGMYKZ");
-        let actual = get(id.as_str()).unwrap();
+        let actual = get(&browser, id.as_str()).unwrap();
         assert_eq!(actual.ebook_id, id);
-        assert_eq!(
-            actual.thumbnail_url.to_string(),
-            String::from("https://m.media-amazon.com/images/I/51CTnaTcJtL.jpg")
-        );
         assert_debug_snapshot!(actual.payment_ebook);
         assert_debug_snapshot!(actual.payment_real);
     }
@@ -106,7 +104,7 @@ mod tests {
             "#,
         );
         let expected = Some(Payment {
-            price: String::from("3,344"),
+            price: String::from("3344"),
             points: String::from("152"),
         });
         assert_eq!(actual, expected);

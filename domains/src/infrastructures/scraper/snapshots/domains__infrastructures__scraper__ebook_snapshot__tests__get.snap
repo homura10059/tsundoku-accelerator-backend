@@ -4,7 +4,7 @@ expression: actual.payment_ebook
 ---
 Some(
     Payment {
-        price: "3,344",
+        price: "3344",
         points: "152",
     },
 )

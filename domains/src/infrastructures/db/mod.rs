@@ -1,3 +1,4 @@
+pub mod ebook;
 pub mod ebook_snapshot;
 pub mod prisma;
 pub mod wish_list;

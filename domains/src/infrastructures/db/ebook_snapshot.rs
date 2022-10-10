@@ -3,8 +3,8 @@ use crate::models::EbookSnapshot;
 use anyhow::{anyhow, Result};
 use math::round;
 
-pub async fn insert(client: &PrismaClient, ebook_snapshot: EbookSnapshot) -> Result<()> {
-    let payment_ebook = ebook_snapshot.payment_ebook.ok_or(anyhow!(
+pub async fn insert(client: &PrismaClient, ebook_snapshot: &EbookSnapshot) -> Result<()> {
+    let payment_ebook = ebook_snapshot.payment_ebook.clone().ok_or(anyhow!(
         "missing payment_ebook in id:{}",
         ebook_snapshot.ebook_id
     ))?;
@@ -12,20 +12,20 @@ pub async fn insert(client: &PrismaClient, ebook_snapshot: EbookSnapshot) -> Res
     let price = payment_ebook.price.parse::<f64>()?;
     let points = payment_ebook.points.parse::<f64>()?;
 
-    let points_rate = round::floor(points / price, 2);
+    let points_rate = round::floor(points / price * 100.0, 2);
 
-    let payment_real = ebook_snapshot.payment_real;
+    let payment_real = ebook_snapshot.payment_real.clone();
 
     let real_price = payment_real
         .map(|payment| payment.price.parse::<f64>().ok())
         .flatten();
     let discount = real_price.map(|real| real - price);
-    let discount_rate = discount.map(|dis| round::floor(dis / price, 2));
+    let discount_rate = discount.map(|dis| round::floor(dis / price * 100.0, 2));
 
     client
         .ebook_snapshot()
         .create(
-            ebook::UniqueWhereParam::IdEquals(ebook_snapshot.ebook_id),
+            ebook::UniqueWhereParam::IdEquals(ebook_snapshot.ebook_id.clone()),
             ebook_snapshot.scraped_at,
             ebook_snapshot.thumbnail_url.to_string(),
             price,
@@ -74,7 +74,7 @@ mod tests {
 
         let client = get_client().await.unwrap();
 
-        let actual = insert(&client, expected).await.unwrap();
+        let actual = insert(&client, &expected).await.unwrap();
         assert_eq!(actual, ())
     }
 }

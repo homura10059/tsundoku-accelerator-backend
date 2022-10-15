@@ -75,7 +75,15 @@ pub async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot
 }
 
 pub async fn select_all_wish_list(client: &PrismaClient) -> Result<Vec<WishListData>> {
-    let wish_lists = client.wish_list().find_many(vec![]).exec().await?;
+    let wish_lists = client
+        .wish_list()
+        .find_many(vec![])
+        .with(
+            wish_list::ebook_in_wish_list::fetch(vec![])
+                .with(ebook_in_wish_list::ebook::fetch().with(ebook::snapshots::fetch(vec![]))),
+        )
+        .exec()
+        .await?;
     Ok(wish_lists)
 }
 

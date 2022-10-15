@@ -1,4 +1,5 @@
+pub mod ebooks;
 mod infrastructures;
 mod models;
-mod notifications;
-pub mod services;
+pub mod notifications;
+pub mod wish_lists;

@@ -1,4 +1,4 @@
-use domains::services;
+use domains::wish_lists;
 use dotenv;
 use std::env;
 
@@ -11,7 +11,7 @@ async fn main() {
     println!("target: {:?}", target);
 
     match target.as_str() {
-        "update_all_wish_list" => services::update_all_wish_list().await.unwrap(),
+        "update_all_wish_list" => wish_lists::update_all_wish_list().await.unwrap(),
         _ => println!("not matched"),
     }
 }

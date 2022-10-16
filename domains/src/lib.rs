@@ -1,3 +1,4 @@
+pub mod ebook_snapshots;
 pub mod ebooks;
 mod infrastructures;
 mod models;

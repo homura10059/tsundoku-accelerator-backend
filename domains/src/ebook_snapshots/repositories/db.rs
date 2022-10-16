@@ -1,4 +1,5 @@
-use crate::infrastructures::db::prisma::{ebook, ebook_snapshot, PrismaClient};
+use crate::infrastructures::prisma;
+use crate::infrastructures::prisma::{ebook, ebook_snapshot, PrismaClient};
 use crate::models::EbookSnapshot;
 use anyhow::{anyhow, Result};
 use math::round;
@@ -44,7 +45,6 @@ pub async fn insert(client: &PrismaClient, ebook_snapshot: &EbookSnapshot) -> Re
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::infrastructures::db::get_client;
     use crate::models::Payment;
     use dotenv;
     use url::Url;
@@ -72,7 +72,7 @@ mod tests {
             payment_real: Some(payment_real),
         };
 
-        let client = get_client().await.unwrap();
+        let client = prisma::new_client().await.unwrap();
 
         let actual = insert(&client, &expected).await.unwrap();
         assert_eq!(actual, ())

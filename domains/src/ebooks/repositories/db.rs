@@ -1,5 +1,5 @@
-use crate::infrastructures::db::prisma::ebook::Data as EbookData;
-use crate::infrastructures::db::prisma::PrismaClient;
+use crate::infrastructures::prisma::ebook::Data as EbookData;
+use crate::infrastructures::prisma::PrismaClient;
 use anyhow::Result;
 
 pub async fn select_all(client: &PrismaClient) -> Result<Vec<EbookData>> {
@@ -10,13 +10,13 @@ pub async fn select_all(client: &PrismaClient) -> Result<Vec<EbookData>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::infrastructures::db::get_client;
+    use crate::infrastructures::prisma;
 
     #[tokio::test]
     async fn test_select_all() {
         dotenv::dotenv().ok();
 
-        let client = get_client().await.unwrap();
+        let client = prisma::new_client().await.unwrap();
         let actual = select_all(&client).await.unwrap();
 
         assert!(actual.len() > 0)

@@ -1,6 +1,6 @@
-use crate::infrastructures::db::prisma::ebook::Data as EbookData;
-use crate::infrastructures::db::prisma::wish_list::Data as WishListData;
-use crate::infrastructures::db::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
+use crate::infrastructures::prisma::ebook::Data as EbookData;
+use crate::infrastructures::prisma::wish_list::Data as WishListData;
+use crate::infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
 use crate::models::{ItemMetaData, WishListSnapshot};
 use anyhow::Result;
 
@@ -90,7 +90,7 @@ pub async fn select_all_wish_list(client: &PrismaClient) -> Result<Vec<WishListD
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::infrastructures::db::get_client;
+    use crate::infrastructures::prisma;
     use dotenv;
     use pure_funcs::get_now_in_sec;
     use url::Url;
@@ -117,7 +117,7 @@ mod tests {
     async fn test_upsert_items() {
         dotenv::dotenv().ok();
 
-        let client = get_client().await.unwrap();
+        let client = prisma::new_client().await.unwrap();
         let items = items_helper();
 
         let actual = upsert_items(&client, &items.to_vec()).await.unwrap();
@@ -128,7 +128,7 @@ mod tests {
     async fn test_upsert_wish_list() {
         dotenv::dotenv().ok();
 
-        let client = get_client().await.unwrap();
+        let client = prisma::new_client().await.unwrap();
         let items = items_helper();
         let expected = WishListSnapshot {
             id: String::from("2BDAPI9RQ09E9"),
@@ -146,7 +146,7 @@ mod tests {
     async fn test_select_all_wish_list() {
         dotenv::dotenv().ok();
 
-        let client = get_client().await.unwrap();
+        let client = prisma::new_client().await.unwrap();
         let actual = select_all_wish_list(&client).await.unwrap();
 
         assert!(actual.len() > 0)

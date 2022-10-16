@@ -1,5 +1,5 @@
+use crate::ebook_snapshots::model::{EbookSnapshot, Payment};
 use crate::infrastructures::scraper;
-use crate::models::{EbookSnapshot, Payment};
 use anyhow::Result;
 use headless_chrome::Browser;
 use once_cell::sync::Lazy;

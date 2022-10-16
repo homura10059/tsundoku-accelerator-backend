@@ -1,6 +1,6 @@
+use crate::ebook_snapshots::model::EbookSnapshot;
 use crate::infrastructures::prisma;
 use crate::infrastructures::prisma::{ebook, ebook_snapshot, PrismaClient};
-use crate::models::EbookSnapshot;
 use anyhow::{anyhow, Result};
 use math::round;
 
@@ -45,7 +45,7 @@ pub async fn insert(client: &PrismaClient, ebook_snapshot: &EbookSnapshot) -> Re
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::Payment;
+    use crate::ebook_snapshots::model::Payment;
     use dotenv;
     use url::Url;
 

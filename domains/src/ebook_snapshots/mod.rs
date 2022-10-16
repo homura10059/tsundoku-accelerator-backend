@@ -1,3 +1,4 @@
+mod model;
 pub mod repositories;
 
 use crate::infrastructures::prisma;

@@ -1,4 +1,3 @@
-mod model;
 mod repositories;
 
 use crate::ebook_snapshots::snap_ebook;

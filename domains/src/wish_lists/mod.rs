@@ -1,6 +1,8 @@
+mod repositories;
+
 use crate::infrastructures::prisma;
 use crate::infrastructures::prisma::PrismaClient;
-use crate::infrastructures::{db, scraper};
+use crate::infrastructures::scraper;
 use anyhow::Result;
 use futures::stream;
 use futures::{future, StreamExt};
@@ -8,13 +10,13 @@ use headless_chrome::Browser;
 
 pub async fn update_wish_list(client: &PrismaClient, id: String) -> Result<()> {
     let snapshot = scraper::wish_list_snapshot::get_wish_list_snapshot(id.as_str())?;
-    let result = db::wish_list::upsert_wish_list(client, &snapshot).await?;
+    let result = repositories::db::upsert_wish_list(client, &snapshot).await?;
     Ok(result)
 }
 
 pub async fn update_all_wish_list() -> Result<()> {
     let client = prisma::new_client().await?;
-    let lists = db::wish_list::select_all_wish_list(&client).await?;
+    let lists = repositories::db::select_all_wish_list(&client).await?;
 
     let futures = lists
         .into_iter()

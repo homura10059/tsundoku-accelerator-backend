@@ -1,7 +1,3 @@
-mod item_meta_data;
-mod wish_list;
-pub mod wish_list_snapshot;
-
 use crate::models::ItemMetaData;
 use crate::models::WishListSnapshot;
 use anyhow::Result;

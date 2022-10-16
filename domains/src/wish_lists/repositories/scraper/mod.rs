@@ -1,8 +1,17 @@
+mod item_meta_data;
+
 use crate::infrastructures::scraper;
-use crate::infrastructures::scraper::{item_meta_data, wish_list};
 use crate::models::{ItemMetaData, WishListSnapshot};
+use anyhow::Result;
 use headless_chrome::{Browser, Element};
 use pure_funcs::get_now_in_sec;
+use url::Url;
+
+fn create_url(id: &str) -> Result<Url> {
+    let url = Url::parse("https://www.amazon.jp/hz/wishlist/ls/")?;
+    let joined = url.join(id)?;
+    Ok(joined)
+}
 
 fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
     let a_tag = elm.find_element(".a-link-normal")?;
@@ -18,7 +27,7 @@ fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
 }
 
 pub fn get_wish_list_snapshot(id: &str) -> anyhow::Result<WishListSnapshot> {
-    let url = wish_list::create_url(id)?;
+    let url = create_url(id)?;
     let browser = Browser::default()?;
 
     let tab = browser.wait_for_initial_tab()?;
@@ -61,6 +70,14 @@ pub fn get_wish_list_snapshot(id: &str) -> anyhow::Result<WishListSnapshot> {
 mod tests {
     use super::*;
     use url::Url;
+
+    #[test]
+    fn test_create_url() {
+        assert_eq!(
+            create_url("2BDAPI9RQ09E9").unwrap(),
+            Url::parse("https://www.amazon.jp/hz/wishlist/ls/2BDAPI9RQ09E9").unwrap()
+        );
+    }
 
     #[test]
     fn test_get_item_urls() {

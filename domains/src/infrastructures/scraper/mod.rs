@@ -1,4 +1,3 @@
-pub mod ebook_snapshot;
 mod item_meta_data;
 mod wish_list;
 pub mod wish_list_snapshot;

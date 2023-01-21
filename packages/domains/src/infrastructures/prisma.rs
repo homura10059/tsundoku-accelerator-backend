@@ -18,7 +18,7 @@ pub async fn new_client() -> Result<PrismaClient, ::prisma_client_rust::NewClien
         let path = url.split(":").nth(1).unwrap();
         if std::path::Path::new("./schema.prisma").exists() {
             url
-        } else if std::path::Path::new("./prisma/schema.prisma").exists() {
+        } else if std::path::Path::new("../../../../prisma/schema.prisma").exists() {
             format!("file:./prisma/{}", path)
         } else {
             url

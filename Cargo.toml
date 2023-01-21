@@ -1,10 +1,9 @@
 [workspace]
 
 members = [
-    "domains",
-    "prisma-cli",
-    "pure-funcs",
-    "backend-cli",
+    "apps/*",
+    "packages/*",
+    "scripts/*",
 ]
 
 resolver = "2"

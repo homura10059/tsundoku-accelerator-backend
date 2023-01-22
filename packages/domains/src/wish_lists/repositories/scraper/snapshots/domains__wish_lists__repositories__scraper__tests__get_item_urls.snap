@@ -1,5 +1,5 @@
 ---
-source: domains/src/wish_lists/repositories/scraper/mod.rs
+source: packages/domains/src/wish_lists/repositories/scraper/mod.rs
 expression: actual.items
 ---
 [
@@ -141,6 +141,6 @@ expression: actual.items
             fragment: None,
         },
         title: ".hack//20th Anniversary Book (ファミ通の攻略本)",
-        price: "3168.0",
+        price: "1743.0",
     },
 ]

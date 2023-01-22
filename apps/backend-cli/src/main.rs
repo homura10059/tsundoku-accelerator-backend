@@ -1,17 +1,26 @@
+use clap::{Parser, Subcommand};
 use domains::wish_lists;
 use dotenv;
-use std::env;
+
+#[derive(Parser)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    #[clap(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// update all wishlists.
+    UpdateAllWishlist,
+}
 
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
+    let args = Args::parse();
 
-    let args: Vec<String> = env::args().collect();
-    let target = args.get(1).unwrap();
-    println!("target: {:?}", target);
-
-    match target.as_str() {
-        "update_all_wish_list" => wish_lists::update_all_wish_list().await.unwrap(),
-        _ => println!("not matched"),
+    match args.command {
+        Commands::UpdateAllWishlist => wish_lists::update_all_wish_list().await.unwrap(),
     }
 }

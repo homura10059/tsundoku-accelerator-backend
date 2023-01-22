@@ -7,3 +7,4 @@ edition = "2021"
 dotenv = "0.15.0"
 domains = { path = "../../packages/domains" }
 tokio = { version = "1.20.1", features = ["full"] }
+clap = { version = "3", features = ["derive"]}

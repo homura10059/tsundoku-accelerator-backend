@@ -1,5 +1,3 @@
-mod item_meta_data;
-
 use crate::infrastructures::scraper;
 use crate::models::{ItemMetaData, WishListSnapshot};
 use anyhow::Result;
@@ -22,7 +20,7 @@ fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
     let attributes = elm.get_attributes()?.unwrap();
     let price = scraper::search_from(&attributes, "data-price").unwrap();
 
-    let meta = item_meta_data::create(href, title, price)?;
+    let meta = ItemMetaData::new(href, title, price)?;
     Ok(meta)
 }
 

@@ -17,7 +17,7 @@ pub async fn snap_all_ebook() -> Result<()> {
         .map(|ebook| snap_ebook(&client, &browser, ebook.id))
         .collect::<Vec<_>>();
     let stream = stream::iter(futures).buffer_unordered(3);
-    let results = stream.collect::<Vec<_>>().await;
+    stream.collect::<Vec<_>>().await;
     Ok(())
 }
 

@@ -1,5 +1,6 @@
 use crate::infrastructures::scraper;
-use crate::models::{ItemMetaData, WishListSnapshot};
+use crate::item_metadata::ItemMetaData;
+use crate::models::WishListSnapshot;
 use anyhow::Result;
 use headless_chrome::{Browser, Element};
 use pure_funcs::get_now_in_sec;

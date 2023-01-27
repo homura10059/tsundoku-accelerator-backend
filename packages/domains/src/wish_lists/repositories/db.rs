@@ -1,7 +1,8 @@
 use crate::infrastructures::prisma::ebook::Data as EbookData;
 use crate::infrastructures::prisma::wish_list::Data as WishListData;
 use crate::infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
-use crate::models::{ItemMetaData, WishListSnapshot};
+use crate::item_metadata::ItemMetaData;
+use crate::models::WishListSnapshot;
 use anyhow::Result;
 
 pub async fn upsert_items(

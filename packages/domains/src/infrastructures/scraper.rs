@@ -1,4 +1,4 @@
-use crate::models::ItemMetaData;
+use crate::item_metadata::ItemMetaData;
 use crate::models::WishListSnapshot;
 use anyhow::Result;
 use headless_chrome::{Browser, Element};

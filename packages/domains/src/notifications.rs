@@ -5,7 +5,7 @@ use anyhow::{anyhow, Result};
 use envy;
 use serde::Deserialize;
 use webhook::client::{WebhookClient, WebhookResult};
-use webhook::models::Message;
+use webhook::models::{Embed, Message};
 
 #[derive(Deserialize, Debug)]
 struct Config {
@@ -22,7 +22,8 @@ pub async fn send_alert_message<T: AsRef<str>>(text: T) -> Result<bool> {
         .send(|message| {
             message.username(config.bot_name.as_ref());
             message.avatar_url(config.avatar_url.as_ref());
-            message.content(text.as_ref())
+            message.content(text.as_ref());
+            message
         })
         .await
         .unwrap();
@@ -30,7 +31,9 @@ pub async fn send_alert_message<T: AsRef<str>>(text: T) -> Result<bool> {
     Ok(result)
 }
 
-pub async fn notify(data: &WishListData) -> Result<()> {
+pub async fn notify(data: &WishListData) -> Result<bool> {
+    let config = envy::prefixed("DISCORD_").from_env::<Config>()?;
+
     let ebook_in_wish_list = data
         .ebook_in_wish_list
         .clone()
@@ -41,31 +44,25 @@ pub async fn notify(data: &WishListData) -> Result<()> {
         .collect::<Vec<_>>();
 
     let mut message = Message::new();
-    message.username("bot");
-    message.avatar_url(
-        "https://github.com/homura10059/sophia-bot/blob/master/image/P5S_icon_sophia.png?raw=true",
-    );
-    message.content("test");
+    message.username(config.bot_name.as_ref());
+    message.avatar_url(config.avatar_url.as_ref());
+    let content = format!("{} のセール情報", data.title);
+    message.content(content.as_ref());
+    for ebook in ebooks {
+        message.embed(|embed| {
+            embed
+                .title(ebook.title.as_str())
+                .url(ebook.url.as_ref())
+                .field("金額", ebook.price.to_string().as_ref(), true)
+                .field("金額", ebook.price.to_string().as_ref(), true)
+                .field("金額", ebook.price.to_string().as_ref(), true)
+        });
+    }
 
-    let url: &str = "https://discord.com/api/webhooks/865929593491161138/IaLTBUVImvSmlzS5zdms860Cvha_wefwi21VMZEjpzzta8-smN4AUadUgrMDapeIQsIE";
-    let client: WebhookClient = WebhookClient::new(url);
-    client.send_message(&message).await.unwrap();
-    //
-    // client
-    //     .send(|message| {
-    //         // for ebook in ebooks {
-    //         //     let snap = ebook.snapshots;
-    //         // }
-    //         message.embed(|embed| {
-    //             embed
-    //                 .title(data.title.as_str())
-    //                 .url(data.url.as_str())
-    //                 .field("price", "data", false)
-    //         })
-    //     })
-    //     .await
-    //     .unwrap();
-    Ok(())
+    let client: WebhookClient = WebhookClient::new(config.alert_chanel.as_ref());
+    let result = client.send_message(&message).await.unwrap();
+
+    Ok(result)
 }
 
 #[cfg(test)]
@@ -85,9 +82,10 @@ mod tests {
 
     #[tokio::test]
     async fn test_notify() {
+        dotenv().ok();
         let ebook = EBookData {
             id: "id".to_string(),
-            url: "url".to_string(),
+            url: "https://example.com".to_string(),
             title: "title".to_string(),
             price: 42.0,
             snapshots: None,
@@ -109,6 +107,6 @@ mod tests {
             ebook_in_wish_list: Some(vec![ebook_in_wish_list]),
         };
         let actual = notify(&data).await.unwrap();
-        assert_eq!(actual, ())
+        assert_eq!(actual, true)
     }
 }

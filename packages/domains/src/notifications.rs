@@ -1,7 +1,9 @@
 use crate::infrastructures::prisma::ebook::Data as EBookData;
 use crate::infrastructures::prisma::ebook_in_wish_list::Data as EBookInWishListData;
+use crate::infrastructures::prisma::ebook_snapshot::Data as EBookSnapShotData;
 use crate::infrastructures::prisma::wish_list::Data as WishListData;
 use anyhow::{anyhow, Result};
+use chrono::{DateTime, FixedOffset, LocalResult, TimeZone};
 use envy;
 use serde::Deserialize;
 use webhook::client::{WebhookClient, WebhookResult};
@@ -49,13 +51,38 @@ pub async fn notify(data: &WishListData) -> Result<bool> {
     let content = format!("{} のセール情報", data.title);
     message.content(content.as_ref());
     for ebook in ebooks {
+        if ebook.snapshots.is_none() {
+            continue;
+        }
+        let snapshots = ebook.snapshots.unwrap();
+        let latest_snapshot = snapshots.get(0);
+        if latest_snapshot.is_none() {
+            continue;
+        }
+        let snap = latest_snapshot.unwrap();
         message.embed(|embed| {
+            let offset = FixedOffset::east_opt(9 * 3600).unwrap();
+            let date = offset.timestamp_opt(snap.scraped_at, 0).unwrap();
+
             embed
                 .title(ebook.title.as_str())
                 .url(ebook.url.as_ref())
-                .field("金額", ebook.price.to_string().as_ref(), true)
-                .field("金額", ebook.price.to_string().as_ref(), true)
-                .field("金額", ebook.price.to_string().as_ref(), true)
+                .field("金額", snap.price.to_string().as_ref(), true)
+                .field(
+                    "値引き率",
+                    snap.discount_rate.unwrap_or(0.0).to_string().as_ref(),
+                    true,
+                )
+                .field(
+                    "ポイント還元率",
+                    snap.points_rate.to_string().as_ref(),
+                    true,
+                )
+                .field(
+                    "更新日",
+                    date.format("%Y/%m/%d %H:%M:%S %Z").to_string().as_ref(),
+                    true,
+                )
         });
     }
 
@@ -83,12 +110,26 @@ mod tests {
     #[tokio::test]
     async fn test_notify() {
         dotenv().ok();
+
+        let snapshot = EBookSnapShotData {
+            id: "".to_string(),
+            ebook: None,
+            ebook_id: "".to_string(),
+            scraped_at: 0,
+            thumbnail_url: "".to_string(),
+            price: 42.0,
+            discount: None,
+            discount_rate: None,
+            points: 1.0,
+            points_rate: 0.10,
+        };
+
         let ebook = EBookData {
             id: "id".to_string(),
             url: "https://example.com".to_string(),
             title: "title".to_string(),
             price: 42.0,
-            snapshots: None,
+            snapshots: Some(vec![snapshot]),
             ebook_in_wish_list: None,
         };
 

@@ -80,15 +80,15 @@ fn convert_from(data: &WishListData) -> Result<Vec<Message>> {
                         .title(ebook.title.as_str())
                         .url(ebook.url.as_ref())
                         .color(color.to_string().as_ref())
-                        .field("金額", snap.price.to_string().as_ref(), true)
+                        .field("金額", format!("¥{}", snap.price).as_ref(), true)
                         .field(
                             "値引き率",
-                            snap.discount_rate.unwrap_or(0.0).to_string().as_ref(),
+                            format!("{}%", snap.discount_rate.unwrap_or(0.0)).as_ref(),
                             true,
                         )
                         .field(
                             "ポイント還元率",
-                            snap.points_rate.to_string().as_ref(),
+                            format!("{}%", snap.points_rate).as_ref(),
                             true,
                         )
                         .field(

@@ -33,10 +33,30 @@ pub async fn send_alert_message<T: AsRef<str>>(text: T) -> Result<bool> {
     Ok(result)
 }
 
-// fn get_color(snapshot: EBookSnapShotData) -> EmbedColor {}
-
 enum EmbedColor {
     Red = 15548997,
+    Green = 5763719,
+    Yellow = 16776960,
+    Grey = 9807270,
+}
+
+fn get_color(snapshot: &EBookSnapShotData) -> EmbedColor {
+    let discount_rate = snapshot.discount_rate.unwrap_or(0.0);
+    let points_rate = snapshot.points_rate;
+
+    if !(discount_rate >= 20.0 || points_rate >= 20.0) {
+        return EmbedColor::Grey;
+    }
+
+    if discount_rate >= 35.0 || points_rate >= 35.0 {
+        return EmbedColor::Red;
+    }
+
+    if discount_rate >= 30.0 || points_rate >= 30.0 {
+        return EmbedColor::Yellow;
+    }
+
+    return EmbedColor::Green;
 }
 
 fn convert_from(data: &WishListData) -> Result<Vec<Message>> {
@@ -74,7 +94,7 @@ fn convert_from(data: &WishListData) -> Result<Vec<Message>> {
                 message.embed(|embed| {
                     let offset = FixedOffset::east_opt(9 * 3600).unwrap();
                     let date = offset.timestamp_opt(snap.scraped_at, 0).unwrap();
-                    let color = EmbedColor::Red as isize;
+                    let color = get_color(snap) as isize;
 
                     embed
                         .title(ebook.title.as_str())

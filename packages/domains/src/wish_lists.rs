@@ -1,4 +1,5 @@
 mod repositories;
+pub mod services;
 
 use crate::infrastructures::prisma;
 use crate::infrastructures::prisma::PrismaClient;

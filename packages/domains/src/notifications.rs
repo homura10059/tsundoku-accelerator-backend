@@ -113,7 +113,7 @@ impl EmbedItem {
             color: get_color(latest_snapshot),
             price: format!("¥{}", latest_snapshot.price),
             discount_rate: format!("{}%", latest_snapshot.discount_rate.unwrap_or(0.0)),
-            points_rate: format!("{}%", snap.points_rate),
+            points_rate: format!("{}%", latest_snapshot.points_rate),
             update_datetime: date.format("%Y/%m/%d %H:%M:%S %Z").to_string(),
         })
     }

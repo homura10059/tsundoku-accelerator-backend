@@ -14,6 +14,7 @@ struct Config {
     bot_name: String,
     avatar_url: String,
     alert_chanel: String,
+    sale_chanel: String,
 }
 
 pub async fn send_alert_message<T: AsRef<str>>(text: T) -> Result<bool> {
@@ -33,6 +34,7 @@ pub async fn send_alert_message<T: AsRef<str>>(text: T) -> Result<bool> {
     Ok(result)
 }
 
+#[derive(Debug, PartialEq, Copy, Clone)]
 enum EmbedColor {
     Red = 15548997,
     Green = 5763719,
@@ -57,6 +59,64 @@ fn get_color(snapshot: &EBookSnapShotData) -> EmbedColor {
     }
 
     return EmbedColor::Green;
+}
+
+#[derive(Debug)]
+struct EmbedItem {
+    title: String,
+    url: String,
+    color: EmbedColor,
+    price: String,
+    discount_rate: String,
+    points_rate: String,
+    update_datetime: String,
+}
+
+#[derive(Debug)]
+struct SaleNotification {
+    to: String,
+    from_user_name: String,
+    from_avatar_url: String,
+    content: String,
+    embeds: Vec<EmbedItem>,
+}
+
+impl SaleNotification {
+    fn new(data: &WishListData) -> Option<SaleNotification> {
+        let config = envy::prefixed("DISCORD_").from_env::<Config>().ok()?;
+        let ebook_in_wish_list = data.ebook_in_wish_list.clone()?;
+        let embeds = ebook_in_wish_list
+            .iter()
+            .filter_map(|x| x.ebook.clone())
+            .filter_map(|ebook| EmbedItem::new(&ebook))
+            .collect::<Vec<_>>();
+        Some(SaleNotification {
+            to: config.sale_chanel,
+            from_user_name: config.bot_name,
+            from_avatar_url: config.avatar_url,
+            content: format!("{} のセール情報", data.title),
+            embeds,
+        })
+    }
+}
+
+impl EmbedItem {
+    fn new(ebook: &EBookData) -> Option<EmbedItem> {
+        let snapshots = ebook.snapshots.clone()?;
+        let latest_snapshot = snapshots.first()?;
+        let offset = FixedOffset::east_opt(9 * 3600).unwrap();
+        let date = offset.timestamp_opt(latest_snapshot.scraped_at, 0).unwrap();
+
+        Some(EmbedItem {
+            title: ebook.title.clone(),
+            url: ebook.url.clone(),
+            color: get_color(latest_snapshot),
+            price: format!("¥{}", latest_snapshot.price),
+            discount_rate: format!("{}%", latest_snapshot.discount_rate.unwrap_or(0.0)),
+            points_rate: format!("{}%", snap.points_rate),
+            update_datetime: date.format("%Y/%m/%d %H:%M:%S %Z").to_string(),
+        })
+    }
 }
 
 fn convert_from(data: &WishListData) -> Result<Vec<Message>> {
@@ -91,15 +151,19 @@ fn convert_from(data: &WishListData) -> Result<Vec<Message>> {
                     continue;
                 }
                 let snap = latest_snapshot.unwrap();
-                message.embed(|embed| {
+                let color = get_color(snap);
+                if color == EmbedColor::Grey {
+                    continue;
+                }
+                message.embed(move |embed| {
                     let offset = FixedOffset::east_opt(9 * 3600).unwrap();
                     let date = offset.timestamp_opt(snap.scraped_at, 0).unwrap();
-                    let color = get_color(snap) as isize;
+                    let color_num = color as i32;
 
                     embed
                         .title(ebook.title.as_str())
                         .url(ebook.url.as_ref())
-                        .color(color.to_string().as_ref())
+                        .color(color_num.to_string().as_ref())
                         .field("金額", format!("¥{}", snap.price).as_ref(), true)
                         .field(
                             "値引き率",

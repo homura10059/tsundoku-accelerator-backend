@@ -132,26 +132,31 @@ fn convert_from(data: &WishListData) -> Option<Vec<Message>> {
 
     let result = chunks
         .iter()
-        .map(|items| {
+        .filter_map(|items| {
             let mut message = Message::new();
             message.username(notification.from_user_name.as_str());
             message.avatar_url(notification.from_avatar_url.as_str());
             message.content(notification.content.as_str());
-
-            for item in *items {
-                let color: String = item.color.into();
-                message.embed(move |embed| {
-                    embed
-                        .title(item.title.as_str())
-                        .url(item.url.as_ref())
-                        .color(color.as_str())
-                        .field("金額", item.price.as_str(), true)
-                        .field("値引き率", item.discount_rate.as_str(), true)
-                        .field("ポイント還元率", item.points_rate.as_str(), true)
-                        .field("更新日", item.update_datetime.as_str(), true)
+            items
+                .iter()
+                .filter(|item| item.color != EmbedColor::Grey)
+                .for_each(|item| {
+                    let color: String = item.color.into();
+                    message.embed(move |embed| {
+                        embed
+                            .title(item.title.as_str())
+                            .url(item.url.as_ref())
+                            .color(color.as_str())
+                            .field("金額", item.price.as_str(), true)
+                            .field("値引き率", item.discount_rate.as_str(), true)
+                            .field("ポイント還元率", item.points_rate.as_str(), true)
+                            .field("更新日", item.update_datetime.as_str(), true)
+                    });
                 });
+            if message.embeds.is_empty() {
+                return None;
             }
-            message
+            Some(message)
         })
         .collect::<Vec<_>>();
 

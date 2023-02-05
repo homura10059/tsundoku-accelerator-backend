@@ -6,7 +6,6 @@ use crate::infrastructures::prisma::PrismaClient;
 use anyhow::Result;
 use futures::stream;
 use futures::{future, StreamExt};
-use headless_chrome::Browser;
 
 pub async fn update_wish_list(client: &PrismaClient, id: String) -> Result<()> {
     let snapshot = repositories::scraper::get_wish_list_snapshot(id.as_str())?;
@@ -23,7 +22,7 @@ pub async fn update_all_wish_list() -> Result<()> {
         .map(|list| update_wish_list(&client, list.id))
         .collect::<Vec<_>>();
     let stream = stream::iter(futures).buffer_unordered(3);
-    let results = stream.collect::<Vec<_>>().await;
+    stream.collect::<Vec<_>>().await;
     Ok(())
 }
 

@@ -1,8 +1,11 @@
 use clap::{Parser, Subcommand};
+use dotenv;
+
+use domains::ebooks;
 use domains::notifications;
 use domains::wish_lists;
-use dotenv;
-use std::result;
+
+use crate::Commands::*;
 
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
@@ -17,6 +20,10 @@ enum Commands {
     UpdateAllWishlist,
     /// send notification for all ebooks
     SendNotification,
+    /// snap ebook data
+    SnapEbooks,
+    /// exec all work flow
+    AllFlow,
 }
 
 #[tokio::main]
@@ -25,21 +32,27 @@ async fn main() {
     let args = Args::parse();
 
     match args.command {
-        Commands::UpdateAllWishlist => {
-            let result = wish_lists::update_all_wish_list().await;
-            match result {
-                Ok(_) => {
-                    // 成功してれば通知しない
-                }
-                Err(e) => {
-                    notifications::send_alert_message(e.to_string())
-                        .await
-                        .unwrap();
-                    ()
-                }
+        UpdateAllWishlist => {
+            wish_lists::update_all_wish_list()
+                .await
+                .expect("can not update");
+        }
+        SendNotification => {
+            let data = wish_lists::services::select_all_wish_list_and_snapshot()
+                .await
+                .unwrap();
+            for d in data {
+                notifications::notify(&d).await.unwrap();
             }
         }
-        Commands::SendNotification => {
+        SnapEbooks => {
+            ebooks::snap_all_ebook().await.expect("can not snap");
+        }
+        AllFlow => {
+            wish_lists::update_all_wish_list()
+                .await
+                .expect("can not update");
+            ebooks::snap_all_ebook().await.expect("can not snap");
             let data = wish_lists::services::select_all_wish_list_and_snapshot()
                 .await
                 .unwrap();

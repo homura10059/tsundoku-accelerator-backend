@@ -44,26 +44,6 @@ expression: actual.items
         price: "2751.0",
     },
     ItemMetaData {
-        id: "B08L53NT5P",
-        url: Url {
-            scheme: "https",
-            cannot_be_a_base: false,
-            username: "",
-            password: None,
-            host: Some(
-                Domain(
-                    "www.amazon.co.jp",
-                ),
-            ),
-            port: None,
-            path: "/dp/B08L53NT5P/",
-            query: None,
-            fragment: None,
-        },
-        title: "『.hack//G.U. Last Recode』完全設定資料集",
-        price: "0.0",
-    },
-    ItemMetaData {
         id: "B08L54335M",
         url: Url {
             scheme: "https",
@@ -141,6 +121,6 @@ expression: actual.items
             fragment: None,
         },
         title: ".hack//20th Anniversary Book (ファミ通の攻略本)",
-        price: "1800.0",
+        price: "3168.0",
     },
 ]

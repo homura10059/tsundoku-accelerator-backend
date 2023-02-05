@@ -92,8 +92,8 @@ pub async fn select_all_wish_list(client: &PrismaClient) -> Result<Vec<WishListD
 mod tests {
     use super::*;
     use crate::infrastructures::prisma;
+    use chrono::Utc;
     use dotenv;
-    use pure_funcs::get_now_in_sec;
     use url::Url;
 
     fn items_helper() -> Vec<ItemMetaData> {
@@ -135,7 +135,7 @@ mod tests {
             id: String::from("2BDAPI9RQ09E9"),
             url: Url::parse("https://www.amazon.jp/hz/wishlist/ls/2BDAPI9RQ09E9").unwrap(),
             title: String::from("test_title"),
-            scraped_at: get_now_in_sec(),
+            scraped_at: Utc::now().timestamp(),
             items,
         };
 

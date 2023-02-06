@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate log;
+
 use clap::{Parser, Subcommand};
 use dotenv;
 
@@ -29,6 +32,8 @@ enum Commands {
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
+    env_logger::init();
+
     let args = Args::parse();
 
     match args.command {
@@ -49,16 +54,20 @@ async fn main() {
             ebooks::snap_all_ebook().await.expect("can not snap");
         }
         AllFlow => {
+            info!("start AllFlow");
             wish_lists::update_all_wish_list()
                 .await
                 .expect("can not update");
+            info!("finish update_all_wish_list");
             ebooks::snap_all_ebook().await.expect("can not snap");
             let data = wish_lists::services::select_all_wish_list_and_snapshot()
                 .await
                 .unwrap();
+            info!("finish snap_all_ebook");
             for d in data {
                 notifications::notify(&d).await.unwrap();
             }
+            info!("finish AllFlow");
         }
     }
 }

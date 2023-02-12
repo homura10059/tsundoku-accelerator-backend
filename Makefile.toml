@@ -14,6 +14,7 @@ description = "deploy binary file"
 workspace = false
 script = ['''
 #!/usr/bin/env bash
+rm -f ~/bin/tsundoku-accelerator/*
 cp -p ./target/release/backend-cli ~/bin/tsundoku-accelerator/
 ''']
 dependencies = ["compile_release"]

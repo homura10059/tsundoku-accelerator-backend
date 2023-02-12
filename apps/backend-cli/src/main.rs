@@ -2,7 +2,7 @@
 extern crate log;
 
 use clap::{Parser, Subcommand};
-use dotenv;
+use dotenv::dotenv;
 
 use domains::ebooks;
 use domains::notifications;
@@ -17,7 +17,7 @@ struct Args {
     command: Commands,
 }
 
-#[derive(Subcommand)]
+#[derive(Subcommand, Debug)]
 enum Commands {
     /// update all wishlists.
     UpdateAllWishlist,
@@ -31,11 +31,12 @@ enum Commands {
 
 #[tokio::main]
 async fn main() {
-    dotenv::dotenv().ok();
+    dotenv().ok();
     env_logger::init();
 
     let args = Args::parse();
 
+    info!("{:?} : start", args.command);
     match args.command {
         UpdateAllWishlist => {
             wish_lists::update_all_wish_list()
@@ -54,20 +55,17 @@ async fn main() {
             ebooks::snap_all_ebook().await.expect("can not snap");
         }
         AllFlow => {
-            info!("start AllFlow");
             wish_lists::update_all_wish_list()
                 .await
                 .expect("can not update");
-            info!("finish update_all_wish_list");
             ebooks::snap_all_ebook().await.expect("can not snap");
             let data = wish_lists::services::select_all_wish_list_and_snapshot()
                 .await
                 .unwrap();
-            info!("finish snap_all_ebook");
             for d in data {
                 notifications::notify(&d).await.unwrap();
             }
-            info!("finish AllFlow");
         }
     }
+    info!("{:?} : finish", args.command);
 }

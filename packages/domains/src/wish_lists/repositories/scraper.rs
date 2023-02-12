@@ -2,8 +2,8 @@ use crate::infrastructures::scraper;
 use crate::item_metadata::ItemMetaData;
 use crate::wish_list_snapshot::WishListSnapshot;
 use anyhow::Result;
+use chrono::Utc;
 use headless_chrome::{Browser, Element};
-use pure_funcs::get_now_in_sec;
 use url::Url;
 
 fn create_url(id: &str) -> Result<Url> {
@@ -57,7 +57,7 @@ pub fn get_wish_list_snapshot(id: &str) -> anyhow::Result<WishListSnapshot> {
     let snapshot = WishListSnapshot {
         id: id.to_string(),
         url,
-        scraped_at: get_now_in_sec(),
+        scraped_at: Utc::now().timestamp(),
         title,
         items,
     };

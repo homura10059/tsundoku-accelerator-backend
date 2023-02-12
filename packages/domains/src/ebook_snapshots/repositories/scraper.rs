@@ -1,9 +1,9 @@
 use crate::ebook_snapshots::model::{EbookSnapshot, Payment};
 use crate::infrastructures::scraper;
 use anyhow::Result;
+use chrono::Utc;
 use headless_chrome::Browser;
 use once_cell::sync::Lazy;
-use pure_funcs::get_now_in_sec;
 use regex::Regex;
 use std::collections::HashSet;
 use url::Url;
@@ -68,7 +68,7 @@ pub fn get(browser: &Browser, id: &str) -> Result<EbookSnapshot> {
 
     let snapshot = EbookSnapshot {
         ebook_id: id.to_string(),
-        scraped_at: get_now_in_sec(),
+        scraped_at: Utc::now().timestamp(),
         thumbnail_url,
         payment_ebook: payments.get(0).map(|x| x.clone()),
         payment_real: payments.get(1).map(|x| x.clone()),

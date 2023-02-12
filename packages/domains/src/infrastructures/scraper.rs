@@ -2,7 +2,6 @@ use crate::item_metadata::ItemMetaData;
 use crate::wish_list_snapshot::WishListSnapshot;
 use anyhow::Result;
 use headless_chrome::{Browser, Element};
-use pure_funcs::get_now_in_sec;
 use url::Url;
 
 pub fn search_from(attributes: &Vec<String>, key: &str) -> Option<String> {

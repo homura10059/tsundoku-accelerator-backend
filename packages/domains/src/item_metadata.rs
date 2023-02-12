@@ -19,7 +19,7 @@ impl ItemMetaData {
     pub fn new<T: Into<String>>(href: T, title: T, price: T) -> anyhow::Result<ItemMetaData> {
         let url = ItemMetaData::create_url(href.into())?;
         let path = url.path().to_string();
-        let tmp: Vec<_> = path.split("/").collect();
+        let tmp: Vec<_> = path.split('/').collect();
         let id = tmp.get(2).unwrap();
         let meta = ItemMetaData {
             id: id.to_string(),

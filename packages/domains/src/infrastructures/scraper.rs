@@ -1,4 +1,4 @@
-pub fn search_from(attributes: &Vec<String>, key: &str) -> Option<String> {
+pub fn search_from(attributes: &[String], key: &str) -> Option<String> {
     let target = attributes.iter().position(|attr| attr == key)? + 1;
     let (_pos, attr) = attributes
         .iter()

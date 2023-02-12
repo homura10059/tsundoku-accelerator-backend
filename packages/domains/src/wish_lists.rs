@@ -9,8 +9,8 @@ use futures::StreamExt;
 
 pub async fn update_wish_list(client: &PrismaClient, id: String) -> Result<()> {
     let snapshot = repositories::scraper::get_wish_list_snapshot(id.as_str())?;
-    let result = repositories::db::upsert_wish_list(client, &snapshot).await?;
-    Ok(result)
+    repositories::db::upsert_wish_list(client, &snapshot).await?;
+    Ok(())
 }
 
 pub async fn update_all_wish_list() -> Result<()> {

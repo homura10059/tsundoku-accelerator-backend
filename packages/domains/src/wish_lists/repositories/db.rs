@@ -5,10 +5,7 @@ use crate::item_metadata::ItemMetaData;
 use crate::wish_list_snapshot::WishListSnapshot;
 use anyhow::Result;
 
-pub async fn upsert_items(
-    client: &PrismaClient,
-    items: &Vec<ItemMetaData>,
-) -> Result<Vec<EbookData>> {
+pub async fn upsert_items(client: &PrismaClient, items: &[ItemMetaData]) -> Result<Vec<EbookData>> {
     let upsert_target = items.to_vec();
     let item_upsert: Vec<_> = upsert_target
         .into_iter()
@@ -41,13 +38,13 @@ pub async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot
             wish_list::create(
                 snapshot.id.clone(),
                 snapshot.url.clone().to_string(),
-                snapshot.scraped_at.clone(),
+                snapshot.scraped_at,
                 snapshot.title.clone(),
                 vec![],
             ),
             vec![
                 wish_list::SetParam::SetUrl(snapshot.url.to_string().clone()),
-                wish_list::SetParam::SetScrapedAt(snapshot.scraped_at.clone()),
+                wish_list::SetParam::SetScrapedAt(snapshot.scraped_at),
                 wish_list::SetParam::SetTitle(snapshot.title.clone()),
             ],
         )
@@ -64,7 +61,7 @@ pub async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot
         .await?;
     let connect: Vec<_> = items
         .into_iter()
-        .map(|item| (wish_list.id.clone(), item.id.clone(), vec![]))
+        .map(|item| (wish_list.id.clone(), item.id, vec![]))
         .collect();
     client
         .ebook_in_wish_list()

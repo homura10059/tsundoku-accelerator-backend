@@ -16,9 +16,7 @@ pub async fn insert(client: &PrismaClient, ebook_snapshot: &EbookSnapshot) -> Re
 
     let payment_real = ebook_snapshot.payment_real.clone();
 
-    let real_price = payment_real
-        .map(|payment| payment.price.parse::<f64>().ok())
-        .flatten();
+    let real_price = payment_real.and_then(|payment| payment.price.parse::<f64>().ok());
     let discount = real_price.map(|real| real - price);
     let discount_rate = discount.map(|dis| round::floor(dis / price * 100.0, 2));
 

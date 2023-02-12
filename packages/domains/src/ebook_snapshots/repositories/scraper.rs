@@ -70,8 +70,8 @@ pub fn get(browser: &Browser, id: &str) -> Result<EbookSnapshot> {
         ebook_id: id.to_string(),
         scraped_at: Utc::now().timestamp(),
         thumbnail_url,
-        payment_ebook: payments.get(0).map(|x| x.clone()),
-        payment_real: payments.get(1).map(|x| x.clone()),
+        payment_ebook: payments.get(0).cloned(),
+        payment_real: payments.get(1).cloned(),
     };
 
     tab.close(true)?;

@@ -12,7 +12,7 @@ fn create_url(id: &str) -> Result<Url> {
     Ok(joined)
 }
 
-fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
+fn get_item(elm: &Element) -> Result<ItemMetaData> {
     let a_tag = elm.find_element(".a-link-normal")?;
     let a_tag_attributes = a_tag.get_attributes()?.unwrap();
     let href = scraper::search_from(&a_tag_attributes, "href").unwrap();
@@ -25,7 +25,7 @@ fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
     Ok(meta)
 }
 
-pub fn get_wish_list_snapshot(id: &str) -> anyhow::Result<WishListSnapshot> {
+pub fn get_wish_list_snapshot(id: &str) -> Result<WishListSnapshot> {
     let url = create_url(id)?;
     let browser = Browser::default()?;
 
@@ -44,7 +44,7 @@ pub fn get_wish_list_snapshot(id: &str) -> anyhow::Result<WishListSnapshot> {
     let item_list = tab.find_elements(selector)?;
     let mut items: Vec<_> = item_list
         .iter()
-        .map(|item| get_item(item))
+        .map(get_item)
         .filter_map(|x| x.ok())
         .collect();
 

@@ -41,9 +41,9 @@ enum EmbedColor {
     Grey = 9807270,
 }
 
-impl Into<String> for EmbedColor {
-    fn into(self) -> String {
-        (self as i32).to_string()
+impl From<EmbedColor> for String {
+    fn from(val: EmbedColor) -> Self {
+        (val as i32).to_string()
     }
 }
 
@@ -63,7 +63,7 @@ fn get_color(snapshot: &EBookSnapShotData) -> EmbedColor {
         return EmbedColor::Yellow;
     }
 
-    return EmbedColor::Green;
+    EmbedColor::Green
 }
 
 #[derive(Debug)]
@@ -179,6 +179,7 @@ mod tests {
     extern crate dotenv;
 
     use super::*;
+    use crate::infrastructures::prisma::ebook_in_wish_list::Data as EBookInWishListData;
     use dotenv::dotenv;
 
     #[tokio::test]

@@ -7,8 +7,8 @@ use headless_chrome::Browser;
 
 pub async fn snap_ebook(client: &PrismaClient, browser: &Browser, id: String) -> Result<()> {
     let snapshot = repositories::scraper::get(browser, id.as_str())?;
-    let result = repositories::db::insert(client, &snapshot).await?;
-    Ok(result)
+    repositories::db::insert(client, &snapshot).await?;
+    Ok(())
 }
 
 #[cfg(test)]

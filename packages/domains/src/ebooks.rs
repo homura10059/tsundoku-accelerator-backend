@@ -4,7 +4,7 @@ use crate::ebook_snapshots::snap_ebook;
 use crate::infrastructures::prisma;
 use anyhow::Result;
 use futures::stream;
-use futures::{future, StreamExt};
+use futures::StreamExt;
 use headless_chrome::Browser;
 
 pub async fn snap_all_ebook() -> Result<()> {

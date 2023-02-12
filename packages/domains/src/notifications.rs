@@ -1,13 +1,12 @@
 use crate::infrastructures::prisma::ebook::Data as EBookData;
-use crate::infrastructures::prisma::ebook_in_wish_list::Data as EBookInWishListData;
 use crate::infrastructures::prisma::ebook_snapshot::Data as EBookSnapShotData;
 use crate::infrastructures::prisma::wish_list::Data as WishListData;
 use anyhow::{anyhow, Result};
-use chrono::{DateTime, FixedOffset, LocalResult, TimeZone};
+use chrono::{FixedOffset, TimeZone};
 use envy;
 use serde::Deserialize;
-use webhook::client::{WebhookClient, WebhookResult};
-use webhook::models::{Embed, Message};
+use webhook::client::WebhookClient;
+use webhook::models::Message;
 
 #[derive(Deserialize, Debug)]
 struct Config {

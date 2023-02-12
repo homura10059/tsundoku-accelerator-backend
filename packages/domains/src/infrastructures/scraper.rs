@@ -1,9 +1,3 @@
-use crate::item_metadata::ItemMetaData;
-use crate::wish_list_snapshot::WishListSnapshot;
-use anyhow::Result;
-use headless_chrome::{Browser, Element};
-use url::Url;
-
 pub fn search_from(attributes: &Vec<String>, key: &str) -> Option<String> {
     let target = attributes.iter().position(|attr| attr == key)? + 1;
     let (_pos, attr) = attributes

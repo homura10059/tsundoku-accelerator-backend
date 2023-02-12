@@ -1,11 +1,8 @@
 mod model;
 pub mod repositories;
 
-use crate::infrastructures::prisma;
 use crate::infrastructures::prisma::PrismaClient;
 use anyhow::Result;
-use futures::stream;
-use futures::{future, StreamExt};
 use headless_chrome::Browser;
 
 pub async fn snap_ebook(client: &PrismaClient, browser: &Browser, id: String) -> Result<()> {
@@ -17,6 +14,7 @@ pub async fn snap_ebook(client: &PrismaClient, browser: &Browser, id: String) ->
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::infrastructures::prisma;
     use dotenv;
 
     #[tokio::test]

@@ -1,5 +1,4 @@
 use crate::item_metadata::ItemMetaData;
-use anyhow::Result;
 use url::Url;
 
 #[derive(Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]

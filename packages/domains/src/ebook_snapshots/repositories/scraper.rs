@@ -1,8 +1,8 @@
 use crate::ebook_snapshots::model::{EbookSnapshot, Payment};
-use crate::infrastructures::scraper;
 use anyhow::Result;
 use chrono::Utc;
 use headless_chrome::Browser;
+use infrastructures::scraper;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::collections::HashSet;

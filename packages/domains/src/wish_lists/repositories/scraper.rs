@@ -1,9 +1,9 @@
-use crate::infrastructures::scraper;
 use crate::item_metadata::ItemMetaData;
 use crate::wish_list_snapshot::WishListSnapshot;
 use anyhow::Result;
 use chrono::Utc;
 use headless_chrome::{Browser, Element};
+use infrastructures::scraper;
 use url::Url;
 
 fn create_url(id: &str) -> Result<Url> {

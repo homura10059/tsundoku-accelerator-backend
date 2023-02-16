@@ -9,7 +9,7 @@ use headless_chrome::Browser;
 
 pub async fn snap_all_ebook() -> Result<()> {
     let client = prisma::new_client().await?;
-    let lists = repositories::db::select_all(&client).await?;
+    let lists = repositories::select_all(&client).await?;
     let browser = Browser::default()?;
 
     let futures = lists

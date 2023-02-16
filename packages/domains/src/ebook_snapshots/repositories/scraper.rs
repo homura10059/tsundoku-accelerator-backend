@@ -1,4 +1,4 @@
-use crate::ebook_snapshots::model::{EbookSnapshot, Payment};
+use crate::ebook_snapshots::{EbookSnapshot, Payment};
 use anyhow::Result;
 use chrono::Utc;
 use headless_chrome::Browser;

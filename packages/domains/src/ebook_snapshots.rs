@@ -38,9 +38,8 @@ mod tests {
         let client = prisma::new_client().await.unwrap();
         let browser = Browser::default().unwrap();
 
-        let actual = snap_ebook(&client, &browser, String::from("B00XV8YCJI"))
+        snap_ebook(&client, &browser, String::from("B00XV8YCJI"))
             .await
             .unwrap();
-        assert_eq!(actual, ());
     }
 }

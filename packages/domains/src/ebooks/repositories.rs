@@ -1,6 +1,6 @@
-use crate::infrastructures::prisma::ebook::Data as EbookData;
-use crate::infrastructures::prisma::PrismaClient;
 use anyhow::Result;
+use infrastructures::prisma::ebook::Data as EbookData;
+use infrastructures::prisma::PrismaClient;
 
 pub async fn select_all(client: &PrismaClient) -> Result<Vec<EbookData>> {
     let ebooks = client.ebook().find_many(vec![]).exec().await?;
@@ -10,7 +10,7 @@ pub async fn select_all(client: &PrismaClient) -> Result<Vec<EbookData>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::infrastructures::prisma;
+    use infrastructures::prisma;
 
     #[tokio::test]
     async fn test_select_all() {

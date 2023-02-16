@@ -1,9 +1,9 @@
-use crate::infrastructures::prisma::ebook::Data as EbookData;
-use crate::infrastructures::prisma::wish_list::Data as WishListData;
-use crate::infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
 use crate::item_metadata::ItemMetaData;
 use crate::wish_list_snapshot::WishListSnapshot;
 use anyhow::Result;
+use infrastructures::prisma::ebook::Data as EbookData;
+use infrastructures::prisma::wish_list::Data as WishListData;
+use infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
 
 pub async fn upsert_items(client: &PrismaClient, items: &[ItemMetaData]) -> Result<Vec<EbookData>> {
     let upsert_target = items.to_vec();
@@ -88,9 +88,9 @@ pub async fn select_all_wish_list(client: &PrismaClient) -> Result<Vec<WishListD
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::infrastructures::prisma;
     use chrono::Utc;
     use dotenv;
+    use infrastructures::prisma;
     use url::Url;
 
     fn items_helper() -> Vec<ItemMetaData> {

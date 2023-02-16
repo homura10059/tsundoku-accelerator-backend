@@ -1,11 +1,11 @@
 mod repositories;
 pub mod services;
 
-use crate::infrastructures::prisma;
-use crate::infrastructures::prisma::PrismaClient;
 use anyhow::Result;
 use futures::stream;
 use futures::StreamExt;
+use infrastructures::prisma;
+use infrastructures::prisma::PrismaClient;
 
 pub async fn update_wish_list(client: &PrismaClient, id: String) -> Result<()> {
     let snapshot = repositories::scraper::get_wish_list_snapshot(id.as_str())?;

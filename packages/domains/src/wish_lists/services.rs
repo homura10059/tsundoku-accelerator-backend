@@ -1,7 +1,7 @@
-use crate::infrastructures::prisma;
-use crate::infrastructures::prisma::ebook_snapshot::OrderByParam;
-use crate::infrastructures::prisma::wish_list::Data as WishListData;
-use crate::infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list};
+use infrastructures::prisma;
+use infrastructures::prisma::ebook_snapshot::OrderByParam;
+use infrastructures::prisma::wish_list::Data as WishListData;
+use infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list};
 
 use anyhow::Result;
 use prisma_client_rust::Direction::Desc;

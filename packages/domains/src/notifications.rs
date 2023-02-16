@@ -1,9 +1,9 @@
-use crate::infrastructures::prisma::ebook::Data as EBookData;
-use crate::infrastructures::prisma::ebook_snapshot::Data as EBookSnapShotData;
-use crate::infrastructures::prisma::wish_list::Data as WishListData;
 use anyhow::{anyhow, Result};
 use chrono::{FixedOffset, TimeZone};
 use envy;
+use infrastructures::prisma::ebook::Data as EBookData;
+use infrastructures::prisma::ebook_snapshot::Data as EBookSnapShotData;
+use infrastructures::prisma::wish_list::Data as WishListData;
 use serde::Deserialize;
 use webhook::client::WebhookClient;
 use webhook::models::Message;
@@ -179,8 +179,8 @@ mod tests {
     extern crate dotenv;
 
     use super::*;
-    use crate::infrastructures::prisma::ebook_in_wish_list::Data as EBookInWishListData;
     use dotenv::dotenv;
+    use infrastructures::prisma::ebook_in_wish_list::Data as EBookInWishListData;
 
     #[tokio::test]
     async fn can_send_alert() {

@@ -1,9 +1,9 @@
 mod model;
 pub mod repositories;
 
-use crate::infrastructures::prisma::PrismaClient;
 use anyhow::Result;
 use headless_chrome::Browser;
+use infrastructures::prisma::PrismaClient;
 
 pub async fn snap_ebook(client: &PrismaClient, browser: &Browser, id: String) -> Result<()> {
     let snapshot = repositories::scraper::get(browser, id.as_str())?;
@@ -14,8 +14,8 @@ pub async fn snap_ebook(client: &PrismaClient, browser: &Browser, id: String) ->
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::infrastructures::prisma;
     use dotenv;
+    use infrastructures::prisma;
 
     #[tokio::test]
     async fn it_works_snap_ebook() {

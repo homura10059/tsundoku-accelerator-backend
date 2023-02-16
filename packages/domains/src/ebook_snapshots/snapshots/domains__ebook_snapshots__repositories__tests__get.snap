@@ -1,5 +1,5 @@
 ---
-source: domains/src/ebook_snapshots/repositories/scraper.rs
+source: packages/domains/src/ebook_snapshots/repositories.rs
 expression: actual.payment_ebook
 ---
 Some(

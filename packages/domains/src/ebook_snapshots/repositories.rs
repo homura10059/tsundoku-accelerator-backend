@@ -1,9 +1,48 @@
-use crate::ebook_snapshots::EbookSnapshot;
+use crate::ebook_snapshots::{EbookSnapshot, Payment};
 use anyhow::anyhow;
+use chrono::Utc;
+use headless_chrome::Browser;
 use infrastructures::prisma::{ebook, ebook_snapshot, PrismaClient};
 use math::round;
+use url::Url;
 
-pub mod scraper;
+pub fn create_url(id: &str) -> anyhow::Result<Url> {
+    let url = Url::parse("https://www.amazon.co.jp/dp/")?;
+    let joined = url.join(id)?;
+    Ok(joined)
+}
+
+pub fn get(browser: &Browser, id: &str) -> anyhow::Result<EbookSnapshot> {
+    let url = create_url(id)?;
+
+    let tab = browser.new_tab()?;
+    tab.navigate_to(url.as_str())?;
+    tab.wait_for_element("#navFooter")?;
+
+    let image = tab.find_element("#ebooksImgBlkFront")?;
+    let image_attribute = image.get_attributes()?.unwrap();
+    let thumbnail_url_str = infrastructures::scraper::search_from(&image_attribute, "src").unwrap();
+    let thumbnail_url = Url::parse(thumbnail_url_str.as_str())?;
+
+    let price_list = tab.find_elements("#tmmSwatches .a-button-text")?;
+    let payments = price_list
+        .iter()
+        .flat_map(|price| price.get_inner_text())
+        .flat_map(Payment::new)
+        .collect::<Vec<_>>();
+
+    let snapshot = EbookSnapshot {
+        ebook_id: id.to_string(),
+        scraped_at: Utc::now().timestamp(),
+        thumbnail_url,
+        payment_ebook: payments.get(0).cloned(),
+        payment_real: payments.get(1).cloned(),
+    };
+
+    tab.close(true)?;
+
+    Ok(snapshot)
+}
 
 pub async fn insert(client: &PrismaClient, ebook_snapshot: &EbookSnapshot) -> anyhow::Result<()> {
     let payment_ebook = ebook_snapshot.payment_ebook.clone().ok_or(anyhow!(
@@ -43,11 +82,11 @@ pub async fn insert(client: &PrismaClient, ebook_snapshot: &EbookSnapshot) -> an
 
 #[cfg(test)]
 mod tests {
-    use crate::ebook_snapshots::repositories::db::*;
-    use crate::ebook_snapshots::repositories::insert;
+    use super::*;
     use crate::ebook_snapshots::{EbookSnapshot, Payment};
     use dotenv;
     use infrastructures::prisma;
+    use insta::assert_debug_snapshot;
     use url::Url;
 
     #[tokio::test]
@@ -77,5 +116,15 @@ mod tests {
 
         let actual = insert(&client, &expected).await.unwrap();
         assert_eq!(actual, ())
+    }
+
+    #[test]
+    fn test_get() {
+        let browser = Browser::default().unwrap();
+        let id = String::from("B09RQGMYKZ");
+        let actual = get(&browser, id.as_str()).unwrap();
+        assert_eq!(actual.ebook_id, id);
+        assert_debug_snapshot!(actual.payment_ebook);
+        assert_debug_snapshot!(actual.payment_real);
     }
 }

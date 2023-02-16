@@ -7,7 +7,7 @@ use url::Url;
 
 pub async fn snap_ebook(client: &PrismaClient, browser: &Browser, id: String) -> Result<()> {
     let snapshot = repositories::scraper::get(browser, id.as_str())?;
-    repositories::db::insert(client, &snapshot).await?;
+    repositories::insert(client, &snapshot).await?;
     Ok(())
 }
 

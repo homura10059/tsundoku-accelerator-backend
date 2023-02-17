@@ -112,9 +112,8 @@ fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
     Ok(meta)
 }
 
-pub fn get_wish_list_snapshot(id: &str) -> anyhow::Result<WishListSnapshot> {
+pub fn get_wish_list_snapshot(browser: &Browser, id: &str) -> anyhow::Result<WishListSnapshot> {
     let url = create_url(id)?;
-    let browser = Browser::default()?;
 
     let tab = browser.new_tab()?;
     tab.navigate_to(url.as_str())?;
@@ -146,6 +145,8 @@ pub fn get_wish_list_snapshot(id: &str) -> anyhow::Result<WishListSnapshot> {
         title,
         items,
     };
+
+    tab.close(true)?;
 
     Ok(snapshot)
 }
@@ -225,9 +226,10 @@ mod tests {
 
     #[test]
     fn test_get_wish_list_snapshot() {
+        let browser = Browser::default().unwrap();
         let id = String::from("2BDAPI9RQ09E9");
-        let url = Url::parse("https://www.amazon.co.jp/hz/wishlist/ls/2BDAPI9RQ09E9").unwrap();
-        let actual = get_wish_list_snapshot(id.as_str()).unwrap();
+        let url = Url::parse("https://www.amazon.jp/hz/wishlist/ls/2BDAPI9RQ09E9").unwrap();
+        let actual = get_wish_list_snapshot(&browser, id.as_str()).unwrap();
         assert_eq!(actual.id, id);
         assert_eq!(actual.url, url);
         assert_eq!(actual.title, String::from("do_not_delete"));

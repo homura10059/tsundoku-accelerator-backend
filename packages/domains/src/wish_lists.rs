@@ -8,14 +8,14 @@ use infrastructures::prisma;
 use infrastructures::prisma::PrismaClient;
 
 pub async fn update_wish_list(client: &PrismaClient, id: String) -> Result<()> {
-    let snapshot = repositories::scraper::get_wish_list_snapshot(id.as_str())?;
-    repositories::db::upsert_wish_list(client, &snapshot).await?;
+    let snapshot = repositories::get_wish_list_snapshot(id.as_str())?;
+    repositories::upsert_wish_list(client, &snapshot).await?;
     Ok(())
 }
 
 pub async fn update_all_wish_list() -> Result<()> {
     let client = prisma::new_client().await?;
-    let lists = repositories::db::select_all_wish_list(&client).await?;
+    let lists = repositories::select_all_wish_list(&client).await?;
 
     let futures = lists
         .into_iter()

@@ -27,10 +27,10 @@ mod tests {
     use dotenv;
 
     // #[tokio::test] // 必要な時だけ動かす
-    async fn it_works_snap_all_ebook() {
-        dotenv::dotenv().ok();
-
-        let actual = snap_all_ebook().await.unwrap();
-        assert_eq!(actual, ());
-    }
+    // async fn it_works_snap_all_ebook() {
+    //     dotenv::dotenv().ok();
+    //
+    //     let actual = snap_all_ebook().await.unwrap();
+    //     assert_eq!(actual, ());
+    // }
 }

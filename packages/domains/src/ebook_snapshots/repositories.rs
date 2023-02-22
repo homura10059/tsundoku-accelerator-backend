@@ -3,8 +3,8 @@ use anyhow::anyhow;
 use chrono::Utc;
 use headless_chrome::Browser;
 use infrastructures::prisma::{ebook, ebook_snapshot, PrismaClient};
-use infrastructures::scraper::from;
 use math::round;
+use scraper::dict::from;
 use url::Url;
 
 pub fn create_url(id: &str) -> anyhow::Result<Url> {

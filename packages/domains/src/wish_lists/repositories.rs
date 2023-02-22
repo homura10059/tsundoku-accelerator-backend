@@ -6,7 +6,7 @@ use headless_chrome::{Browser, Element};
 use infrastructures::prisma::ebook::Data as EbookData;
 use infrastructures::prisma::wish_list::Data as WishListData;
 use infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
-use infrastructures::scraper::from;
+use scraper::dict::from;
 use url::Url;
 
 pub async fn upsert_items(client: &PrismaClient, items: &[ItemMetaData]) -> Result<Vec<EbookData>> {
@@ -76,7 +76,7 @@ pub async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot
     Ok(())
 }
 
-pub async fn select_all_wish_list(client: &PrismaClient) -> anyhow::Result<Vec<WishListData>> {
+pub async fn select_all_wish_list(client: &PrismaClient) -> Result<Vec<WishListData>> {
     let wish_lists = client
         .wish_list()
         .find_many(vec![])
@@ -89,13 +89,13 @@ pub async fn select_all_wish_list(client: &PrismaClient) -> anyhow::Result<Vec<W
     Ok(wish_lists)
 }
 
-fn create_url(id: &str) -> anyhow::Result<Url> {
+fn create_url(id: &str) -> Result<Url> {
     let url = Url::parse("https://www.amazon.jp/hz/wishlist/ls/")?;
     let joined = url.join(id)?;
     Ok(joined)
 }
 
-fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
+fn get_item(elm: &Element) -> Result<ItemMetaData> {
     let a_tag = elm.find_element(".a-link-normal")?;
     let a_tag_attributes = a_tag.get_attributes()?.unwrap();
     let a_tag_dict = from(&a_tag_attributes);
@@ -110,7 +110,7 @@ fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
     Ok(meta)
 }
 
-pub fn get_wish_list_snapshot(browser: &Browser, id: &str) -> anyhow::Result<WishListSnapshot> {
+pub fn get_wish_list_snapshot(browser: &Browser, id: &str) -> Result<WishListSnapshot> {
     let url = create_url(id)?;
 
     let tab = browser.new_tab()?;

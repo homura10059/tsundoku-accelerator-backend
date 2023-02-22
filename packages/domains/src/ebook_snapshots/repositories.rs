@@ -1,8 +1,8 @@
 use crate::ebook_snapshots::{EbookSnapshot, Payment};
 use anyhow::anyhow;
 use chrono::Utc;
+use db_client::prisma::{ebook, ebook_snapshot, PrismaClient};
 use headless_chrome::Browser;
-use infrastructures::prisma::{ebook, ebook_snapshot, PrismaClient};
 use math::round;
 use scraper::dict::from;
 use url::Url;
@@ -86,8 +86,8 @@ pub async fn insert(client: &PrismaClient, ebook_snapshot: &EbookSnapshot) -> an
 mod tests {
     use super::*;
     use crate::ebook_snapshots::{EbookSnapshot, Payment};
+    use db_client::prisma;
     use dotenv;
-    use infrastructures::prisma;
     use insta::assert_debug_snapshot;
     use url::Url;
 

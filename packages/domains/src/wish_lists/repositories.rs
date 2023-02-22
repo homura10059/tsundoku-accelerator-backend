@@ -2,10 +2,10 @@ use crate::item_metadata::ItemMetaData;
 use crate::wish_list_snapshot::WishListSnapshot;
 use anyhow::Result;
 use chrono::Utc;
+use db_client::prisma::ebook::Data as EbookData;
+use db_client::prisma::wish_list::Data as WishListData;
+use db_client::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
 use headless_chrome::{Browser, Element};
-use infrastructures::prisma::ebook::Data as EbookData;
-use infrastructures::prisma::wish_list::Data as WishListData;
-use infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
 use scraper::dict::from;
 use url::Url;
 
@@ -153,8 +153,8 @@ pub fn get_wish_list_snapshot(browser: &Browser, id: &str) -> Result<WishListSna
 mod tests {
     use super::*;
     use chrono::Utc;
+    use db_client::prisma;
     use dotenv;
-    use infrastructures::prisma;
     use url::Url;
 
     fn items_helper() -> Vec<ItemMetaData> {

@@ -1,8 +1,8 @@
 pub mod repositories;
 
 use anyhow::Result;
+use db_client::prisma::PrismaClient;
 use headless_chrome::Browser;
-use infrastructures::prisma::PrismaClient;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::collections::HashSet;
@@ -64,8 +64,8 @@ pub struct EbookSnapshot {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use db_client::prisma;
     use dotenv;
-    use infrastructures::prisma;
 
     #[tokio::test]
     async fn it_works_snap_ebook() {

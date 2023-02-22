@@ -2,10 +2,10 @@ mod repositories;
 
 use crate::ebook_snapshots::snap_ebook;
 use anyhow::Result;
+use db_client::prisma;
 use futures::stream;
 use futures::StreamExt;
 use headless_chrome::Browser;
-use infrastructures::prisma;
 
 pub async fn snap_all_ebook() -> Result<()> {
     let client = prisma::new_client().await?;

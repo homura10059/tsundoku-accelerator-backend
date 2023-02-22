@@ -1,5 +1,6 @@
 use crate::item_metadata::ItemMetaData;
 use crate::wish_list_snapshot::WishListSnapshot;
+use anyhow::Result;
 use chrono::Utc;
 use headless_chrome::{Browser, Element};
 use infrastructures::prisma::ebook::Data as EbookData;
@@ -7,10 +8,7 @@ use infrastructures::prisma::wish_list::Data as WishListData;
 use infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
 use url::Url;
 
-pub async fn upsert_items(
-    client: &PrismaClient,
-    items: &[ItemMetaData],
-) -> anyhow::Result<Vec<EbookData>> {
+pub async fn upsert_items(client: &PrismaClient, items: &[ItemMetaData]) -> Result<Vec<EbookData>> {
     let upsert_target = items.to_vec();
     let item_upsert: Vec<_> = upsert_target
         .into_iter()
@@ -33,10 +31,7 @@ pub async fn upsert_items(
     Ok(items)
 }
 
-pub async fn upsert_wish_list(
-    client: &PrismaClient,
-    snapshot: &WishListSnapshot,
-) -> anyhow::Result<()> {
+pub async fn upsert_wish_list(client: &PrismaClient, snapshot: &WishListSnapshot) -> Result<()> {
     let items = upsert_items(client, &snapshot.items).await?;
 
     let wish_list = client
@@ -154,7 +149,6 @@ pub fn get_wish_list_snapshot(browser: &Browser, id: &str) -> anyhow::Result<Wis
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::wish_lists::repositories::{select_all_wish_list, upsert_items, upsert_wish_list};
     use chrono::Utc;
     use dotenv;
     use infrastructures::prisma;

@@ -7,6 +7,7 @@ use dotenv::dotenv;
 use domains::ebooks;
 use domains::notifications;
 use domains::wish_lists::services;
+use queries::wish_list::select_all_with_snapshot;
 
 use crate::Commands::*;
 
@@ -44,7 +45,7 @@ async fn main() {
                 .expect("can not update");
         }
         SendNotification => {
-            let data = services::select_all_wish_list_and_snapshot().await.unwrap();
+            let data = select_all_with_snapshot().await.unwrap();
             for d in data {
                 notifications::notify(&d).await.unwrap();
             }
@@ -57,7 +58,7 @@ async fn main() {
                 .await
                 .expect("can not update");
             ebooks::snap_all_ebook().await.expect("can not snap");
-            let data = services::select_all_wish_list_and_snapshot().await.unwrap();
+            let data = select_all_with_snapshot().await.unwrap();
             for d in data {
                 notifications::notify(&d).await.unwrap();
             }

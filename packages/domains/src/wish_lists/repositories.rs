@@ -6,6 +6,7 @@ use headless_chrome::{Browser, Element};
 use infrastructures::prisma::ebook::Data as EbookData;
 use infrastructures::prisma::wish_list::Data as WishListData;
 use infrastructures::prisma::{ebook, ebook_in_wish_list, wish_list, PrismaClient};
+use infrastructures::scraper::from;
 use url::Url;
 
 pub async fn upsert_items(client: &PrismaClient, items: &[ItemMetaData]) -> Result<Vec<EbookData>> {
@@ -97,11 +98,13 @@ fn create_url(id: &str) -> anyhow::Result<Url> {
 fn get_item(elm: &Element) -> anyhow::Result<ItemMetaData> {
     let a_tag = elm.find_element(".a-link-normal")?;
     let a_tag_attributes = a_tag.get_attributes()?.unwrap();
-    let href = infrastructures::scraper::search_from(&a_tag_attributes, "href").unwrap();
-    let title = infrastructures::scraper::search_from(&a_tag_attributes, "title").unwrap();
+    let a_tag_dict = from(&a_tag_attributes);
+    let href = a_tag_dict.get("href").unwrap();
+    let title = a_tag_dict.get("title").unwrap();
 
     let attributes = elm.get_attributes()?.unwrap();
-    let price = infrastructures::scraper::search_from(&attributes, "data-price").unwrap();
+    let dict = from(&attributes);
+    let price = dict.get("data-price").unwrap();
 
     let meta = ItemMetaData::new(href, title, price)?;
     Ok(meta)

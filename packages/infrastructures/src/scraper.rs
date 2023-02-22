@@ -1,11 +1,19 @@
+use std::collections::HashMap;
+
+pub fn from(attr: &[String]) -> HashMap<String, String> {
+    attr.chunks(2)
+        .filter_map(|chunk| {
+            let key = chunk.get(0)?;
+            let val = chunk.get(1)?;
+            Some((key.to_string(), val.to_string()))
+        })
+        .collect::<HashMap<String, String>>()
+}
+
 pub fn search_from(attributes: &[String], key: &str) -> Option<String> {
-    let target = attributes.iter().position(|attr| attr == key)? + 1;
-    let (_pos, attr) = attributes
-        .iter()
-        .enumerate()
-        .find(|(pos, _attr)| pos.eq(&target))?;
-    let result = attr.clone();
-    Some(result)
+    let dict = from(attributes);
+    let val = dict.get(key).map(|x| x.to_string());
+    val
 }
 
 #[cfg(test)]

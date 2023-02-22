@@ -3,6 +3,7 @@ use anyhow::anyhow;
 use chrono::Utc;
 use headless_chrome::Browser;
 use infrastructures::prisma::{ebook, ebook_snapshot, PrismaClient};
+use infrastructures::scraper::from;
 use math::round;
 use url::Url;
 
@@ -21,7 +22,8 @@ pub fn get(browser: &Browser, id: &str) -> anyhow::Result<EbookSnapshot> {
 
     let image = tab.find_element("#ebooksImgBlkFront")?;
     let image_attribute = image.get_attributes()?.unwrap();
-    let thumbnail_url_str = infrastructures::scraper::search_from(&image_attribute, "src").unwrap();
+    let dict = from(&image_attribute);
+    let thumbnail_url_str = dict.get("src").unwrap();
     let thumbnail_url = Url::parse(thumbnail_url_str.as_str())?;
 
     let price_list = tab.find_elements("#tmmSwatches .a-button-text")?;
@@ -114,8 +116,7 @@ mod tests {
 
         let client = prisma::new_client().await.unwrap();
 
-        let actual = insert(&client, &expected).await.unwrap();
-        assert_eq!(actual, ())
+        insert(&client, &expected).await.unwrap()
     }
 
     #[test]

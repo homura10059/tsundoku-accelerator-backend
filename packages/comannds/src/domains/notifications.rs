@@ -166,6 +166,9 @@ pub async fn notify(data: &WishListData) -> Result<bool> {
     let config = envy::prefixed("DISCORD_").from_env::<Config>()?;
 
     let messages = convert_from(data).ok_or(anyhow!("can not create message"))?;
+    if messages.is_empty() {
+        info!("no messages for {}", data.title)
+    }
     let client: WebhookClient = WebhookClient::new(config.sale_chanel.as_ref());
     for message in messages {
         client.send_message(&message).await.unwrap();

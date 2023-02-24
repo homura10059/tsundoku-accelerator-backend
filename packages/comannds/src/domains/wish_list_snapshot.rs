@@ -1,4 +1,4 @@
-use crate::item_metadata::ItemMetaData;
+use crate::domains::item_metadata::ItemMetaData;
 use url::Url;
 
 #[derive(Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]

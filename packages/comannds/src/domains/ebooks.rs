@@ -1,6 +1,6 @@
 mod repositories;
 
-use crate::ebook_snapshots::snap_ebook;
+use crate::domains::ebook_snapshots::snap_ebook;
 use anyhow::Result;
 use db_client::prisma;
 use futures::stream;

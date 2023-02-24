@@ -1,7 +1,7 @@
 use db_client::prisma;
 use db_client::prisma::PrismaClient;
 
-use crate::wish_lists::repositories;
+use crate::domains::wish_lists::repositories;
 use anyhow::Result;
 use futures::stream;
 use futures::StreamExt;

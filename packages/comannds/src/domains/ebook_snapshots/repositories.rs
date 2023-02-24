@@ -1,4 +1,4 @@
-use crate::ebook_snapshots::{EbookSnapshot, Payment};
+use crate::domains::ebook_snapshots::{EbookSnapshot, Payment};
 use anyhow::anyhow;
 use chrono::Utc;
 use db_client::prisma::{ebook, ebook_snapshot, PrismaClient};

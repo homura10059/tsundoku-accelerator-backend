@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 dotenv = "0.15.0"
-domains = { path = "../../packages/domains" }
+comannds = { path = "../../packages/comannds" }
 tokio = { version = "1.20.1", features = ["full"] }
 clap = { version = "4.1.6", features = ["derive"]}
 log = "0.4.0"

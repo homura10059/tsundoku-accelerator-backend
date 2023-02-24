@@ -154,7 +154,7 @@ name = "backend-cli"
 version = "0.1.0"
 dependencies = [
  "clap",
- "domains",
+ "comannds",
  "dotenv",
  "env_logger",
  "log",
@@ -915,31 +915,6 @@ dependencies = [
  "schema-builder",
  "serde",
  "serde_json",
-]
-
-[[package]]
-name = "domains"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "db_client",
- "dotenv",
- "dotenv_codegen",
- "envy",
- "futures",
- "headless_chrome",
- "insta",
- "libmath",
- "once_cell",
- "prisma-client-rust",
- "prisma-client-rust-cli",
- "regex",
- "scraper",
- "serde",
- "tokio",
- "url",
- "webhook",
 ]
 
 [[package]]

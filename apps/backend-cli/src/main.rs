@@ -4,9 +4,9 @@ extern crate log;
 use clap::{Parser, Subcommand};
 use dotenv::dotenv;
 
-use domains::ebooks;
-use domains::notifications;
-use domains::wish_lists::services;
+use comannds::domains::ebooks;
+use comannds::domains::notifications;
+use comannds::domains::wish_lists::services;
 use queries::wish_list::select_all_with_snapshot;
 
 use crate::Commands::*;

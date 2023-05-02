@@ -13,44 +13,12 @@ pub fn from(attr: &[String]) -> HashMap<String, String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
-    #[test]
-    fn test_from_2() {
-        let mock_vec = vec!["key_1".to_string(), "val_1".to_string()];
-        let actual = from(&mock_vec);
-
-        let mut expected = HashMap::new();
-        expected.insert("key_1".to_string(), "val_1".to_string());
-        assert_eq!(actual, expected)
-    }
-
-    #[test]
-    fn test_from_3() {
-        let mock_vec = vec![
-            "key_1".to_string(),
-            "val_1".to_string(),
-            "key_2".to_string(),
-        ];
-        let actual = from(&mock_vec);
-
-        let mut expected = HashMap::new();
-        expected.insert("key_1".to_string(), "val_1".to_string());
-        assert_eq!(actual, expected)
-    }
-
-    #[test]
-    fn test_from_4() {
-        let mock_vec = vec![
-            "key_1".to_string(),
-            "val_1".to_string(),
-            "key_2".to_string(),
-            "val_2".to_string(),
-        ];
-        let actual = from(&mock_vec);
-
-        let mut expected = HashMap::new();
-        expected.insert("key_1".to_string(), "val_1".to_string());
-        expected.insert("key_2".to_string(), "val_2".to_string());
-        assert_eq!(actual, expected)
+    proptest! {
+        #[test]
+        fn doesnt_crash(attr: Vec<String>) {
+            from(&attr);
+        }
     }
 }

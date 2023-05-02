@@ -1,3 +1,9 @@
+[tasks.test_cov]
+description = "make test coverage report"
+workspace = false
+command = "cargo"
+args = ["llvm-cov", "--open"]
+
 [tasks.compile]
 description = "Build"
 workspace = false

@@ -85,7 +85,7 @@ pub async fn insert(client: &PrismaClient, ebook_snapshot: &EbookSnapshot) -> an
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ebook_snapshots::{EbookSnapshot, Payment};
+    use crate::domains::ebook_snapshots::{EbookSnapshot, Payment};
     use db_client::prisma;
     use dotenv;
     use insta::assert_debug_snapshot;

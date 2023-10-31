@@ -20,7 +20,7 @@ pub fn get(browser: &Browser, id: &str) -> anyhow::Result<EbookSnapshot> {
     tab.navigate_to(url.as_str())?;
     tab.wait_for_element("#navFooter")?;
 
-    let image = tab.find_element("#ebooksImgBlkFront")?;
+    let image = tab.find_element("#landingImage")?;
     let image_attribute = image.get_attributes()?.unwrap();
     let dict = from(&image_attribute);
     let thumbnail_url_str = dict.get("src").unwrap();

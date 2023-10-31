@@ -1,0 +1,10 @@
+---
+source: packages/comannds/src/domains/ebook_snapshots/repositories.rs
+expression: actual.payment_ebook
+---
+Some(
+    Payment {
+        price: "3344",
+        points: "101",
+    },
+)

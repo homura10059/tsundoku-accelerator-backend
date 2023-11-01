@@ -1,5 +1,6 @@
 pub mod repositories;
 
+use crate::domains::notifications::send_alert_message;
 use anyhow::Result;
 use db_client::prisma::PrismaClient;
 use headless_chrome::Browser;
@@ -9,7 +10,14 @@ use std::collections::HashSet;
 use url::Url;
 
 pub async fn snap_ebook(client: &PrismaClient, browser: &Browser, id: String) -> Result<()> {
-    let snapshot = repositories::get(browser, id.as_str())?;
+    let snapshot = match repositories::get(browser, id.as_str()) {
+        Ok(s) => s,
+        Err(e) => {
+            let msg = format!("error snap_ebook id: {},  error:{}", id, e.to_string());
+            send_alert_message(msg.clone()).await.unwrap();
+            panic!("{}", msg);
+        }
+    };
     repositories::insert(client, &snapshot).await?;
     Ok(())
 }

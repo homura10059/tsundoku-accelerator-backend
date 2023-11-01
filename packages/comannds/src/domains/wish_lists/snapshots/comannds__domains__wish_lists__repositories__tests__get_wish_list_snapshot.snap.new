@@ -1,0 +1,127 @@
+---
+source: packages/comannds/src/domains/wish_lists/repositories.rs
+assertion_line: 233
+expression: actual.items
+---
+[
+    ItemMetaData {
+        id: "B08L51YSLR",
+        url: Url {
+            scheme: "https",
+            cannot_be_a_base: false,
+            username: "",
+            password: None,
+            host: Some(
+                Domain(
+                    "www.amazon.co.jp",
+                ),
+            ),
+            port: None,
+            path: "/dp/B08L51YSLR/",
+            query: None,
+            fragment: None,
+        },
+        title: "『.hack//G.U.』完全設定資料集BLACK",
+        price: "2751.0",
+    },
+    ItemMetaData {
+        id: "B08L5278XF",
+        url: Url {
+            scheme: "https",
+            cannot_be_a_base: false,
+            username: "",
+            password: None,
+            host: Some(
+                Domain(
+                    "www.amazon.co.jp",
+                ),
+            ),
+            port: None,
+            path: "/dp/B08L5278XF/",
+            query: None,
+            fragment: None,
+        },
+        title: "『.hack//G.U.』完全設定資料集WHITE",
+        price: "2751.0",
+    },
+    ItemMetaData {
+        id: "B08L54335M",
+        url: Url {
+            scheme: "https",
+            cannot_be_a_base: false,
+            username: "",
+            password: None,
+            host: Some(
+                Domain(
+                    "www.amazon.co.jp",
+                ),
+            ),
+            port: None,
+            path: "/dp/B08L54335M/",
+            query: None,
+            fragment: None,
+        },
+        title: "『.hack//Link』完全設定資料集",
+        price: "3375.0",
+    },
+    ItemMetaData {
+        id: "B08S7CJV4X",
+        url: Url {
+            scheme: "https",
+            cannot_be_a_base: false,
+            username: "",
+            password: None,
+            host: Some(
+                Domain(
+                    "www.amazon.co.jp",
+                ),
+            ),
+            port: None,
+            path: "/dp/B08S7CJV4X/",
+            query: None,
+            fragment: None,
+        },
+        title: ".hack//bullet",
+        price: "1307.0",
+    },
+    ItemMetaData {
+        id: "B09TPLQGKS",
+        url: Url {
+            scheme: "https",
+            cannot_be_a_base: false,
+            username: "",
+            password: None,
+            host: Some(
+                Domain(
+                    "www.amazon.co.jp",
+                ),
+            ),
+            port: None,
+            path: "/dp/B09TPLQGKS/",
+            query: None,
+            fragment: None,
+        },
+        title: ".hack//G.U. Begins",
+        price: "396.0",
+    },
+    ItemMetaData {
+        id: "B0B5Q2RMX6",
+        url: Url {
+            scheme: "https",
+            cannot_be_a_base: false,
+            username: "",
+            password: None,
+            host: Some(
+                Domain(
+                    "www.amazon.co.jp",
+                ),
+            ),
+            port: None,
+            path: "/dp/B0B5Q2RMX6/",
+            query: None,
+            fragment: None,
+        },
+        title: ".hack//20th Anniversary Book (ファミ通の攻略本)",
+        price: "3168.0",
+    },
+]
